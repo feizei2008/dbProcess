@@ -14,7 +14,8 @@ class CleanData(object):
         self.dfInfo = self.loadInformation()
         self.removeList = []
         self.updateList = []
-        self.initCleanRegulation()
+        self.logList = []
+        # self.initCleanRegulation()
 
     def initCleanRegulation(self):
         db = self.get_db("localhost", 27017, 'MTS_TICK_DB')
@@ -47,21 +48,32 @@ class CleanData(object):
     def cleanIllegalTradingTime(self):
         """删除非交易时段数据"""
         self.df['illegalTime'] = self.df["time"].map(self.StandardizeTimePeriod)
-        self.removeList.extend(self.df[self.df['illegalTime'] == True]['_id'])
+        if any(self.df[self.df['illegalTime'] == True]._values):
+            self.removeList.extend(self.df[self.df['illegalTime'] == True]['_id'])
         del self.df["illegalTime"]
 
     def cleanSameTimestamp(self):
         """清除重复时间戳，记录"""
-        self.removeList.append(self.df[self.df.duplicated["datetime"] == True]["_id"])
+        idList = self.df[self.df["datetime"].duplicated()]["_id"]
+        for i in idList._values:
+            self.removeList.append(i)
 
     def cleanNullVolTurn(self):
         """Tick有成交，但volume和turnover为0"""
-        lastVol = self.df['lastVolume'] != 0
-        lastTurn = self.df["lastTurnover"] != 0
-        Vol = self.df["volume"] == 0
-        Turn = self.df["turnover"] == 0
-        openIn = self.df["openInterest"] == 0
-        lastP = self.df["lastPrice"] != 0
+        f = lambda x: float(x)
+        self.df["lastVolume"].map(f)
+        self.df["lastTurnover"].map(f)
+        self.df["volume"].map(f)
+        self.df["turnover"].map(f)
+        self.df["openInterest"].map(f)
+        self.df["lastPrice"].map(f)
+
+        lastVol = self.df["lastVolume"] != 0.0
+        lastTurn = self.df["lastTurnover"] != 0.0
+        Vol = self.df["volume"] == 0.0
+        Turn = self.df["turnover"] == 0.0
+        openIn = self.df["openInterest"] == 0.0
+        lastP = self.df["lastPrice"] != 0.0
 
         # lastTurn为0,lastVolume和lastPrice不为0
         dfTemp = self.df.loc[~lastTurn & lastVol & lastP]
@@ -83,21 +95,24 @@ class CleanData(object):
 
         # lastVolume和lastTurnover均不为0
         dfTemp = self.df.loc[lastVol & lastTurn & (Vol | Turn | openIn)]
+
         # volume、openInterest、turnover均为0，删除并记录
-        self.removeList.extend(dfTemp.loc[Vol & Turn & openIn,["_id"]])
+        if dfTemp.loc[Vol & Turn & openIn]._values.any():
+            self.removeList.extend(i for i in dfTemp.loc[Vol & Turn & openIn]["_id"]._values)
+            self.logList.extend(i for i in dfTemp.loc[Vol & Turn & openIn]["_id"]._values)
 
         # turnover为0,lastVol不为0
-        for i, row in dfTemp[Turn].iterrows():
-            preIndex = row.index[0] - 1
+        for i, row in self.df[Turn & lastVol].iterrows():
+            preIndex = i - 1
             if preIndex >= 0:
-                row["turnover"] = dfTemp.iloc[preIndex]["turnover"] + row["lastTurnover"]
+                row["turnover"] = self.df.iloc[preIndex]["turnover"] + row["lastTurnover"]
                 self.updateList.append(row)
 
-        # volume为0,lastVolume不为0
-        for i,row in dfTemp[Vol].iterrows():
-            preIndex = row.index[0] - 1
+        # volume为0,lastVol不为0
+        for i,row in self.df[Vol & lastVol].iterrows():
+            preIndex = i - 1
             if preIndex >= 0:
-                row["volume"] = dfTemp.iloc[preIndex]["volume"] + row["lastVolume"]
+                row["volume"] = self.df.iloc[preIndex]["volume"] + row["lastVolume"]
                 self.updateList.append(row)
 
     def cleanNullOpenInter(self):
@@ -105,52 +120,60 @@ class CleanData(object):
         self.paddingWithPrevious("openInterest")
 
     def cleanNullPriceIndicator(self):
-        lastP = self.df["lastPrice"] == 0
-        high = self.df["highPrice"] == 0
-        low = self.df["lowPrice"] == 0
-        bidP = self.df["bidPrice1"] == 0
-        askP = self.df["askPrice1"] == 0
+        lastP = self.df["lastPrice"] == 0.0
+        high = self.df["highPrice"] == 0.0
+        low = self.df["lowPrice"] == 0.0
+        bidP = self.df["bidPrice1"] == 0.0
+        askP = self.df["askPrice1"] == 0.0
         #如果均为0，删除
-        self.removeList.extend(self.df.loc[lastP & high & low & bidP & askP, ["_id"]])
+        if self.df.loc[lastP & high & low & bidP & askP]._values.any():
+            self.removeList.extend(i for i in self.df.loc[lastP & high & low & bidP & askP]["_id"]._values)
 
-        if self.df.loc[lastP, ["_id"]] not in self.removeList:
+        if self.df.loc[lastP]["_id"] not in self.removeList:
             self.paddingWithPrevious("lastPrice")
-        if self.df.loc[high, ["_id"]] not in self.removeList:
+        if self.df.loc[high]["_id"] not in self.removeList:
             self.paddingWithPrevious("highPrice")
-        if self.df.loc[low, ["_id"]] not in self.removeList:
+        if self.df.loc[low]["_id"] not in self.removeList:
             self.paddingWithPrevious("lowPrice")
-        if self.df.loc[bidP, ["_id"]] not in self.removeList:
+        if self.df.loc[bidP]["_id"] not in self.removeList:
             self.paddingWithPrevious("bidPrice1")
-        if self.df.loc[askP, ["_id"]] not in self.removeList:
+        if self.df.loc[askP]["_id"] not in self.removeList:
             self.paddingWithPrevious("askPrice1")
 
     def recordExceptionalPrice(self):
-        dfTemp = self.df["lastPrice"]
-        dfTemp["delta"] = self.df["lastPrice"] - self.df["lastPrice"].shift(1)
-        pass
+        self.estimateExceptional("lastPrice")
+        self.estimateExceptional("highPrice")
+        self.estimateExceptional("lowPrice")
+        self.estimateExceptional("bidPrice1")
+        self.estimateExceptional("askPrice1")
 
-
+    def estimateExceptional(self,field):
+        dfTemp = self.df[field]
+        dfTemp["delta"] = self.df[field] - self.df[field].shift(1)
+        dfTemp["IsExcept"] = dfTemp["delta"] >= dfTemp[field].shift(1) * 0.05
+        if any(dfTemp.loc[dfTemp["IsExcept"]]._values):
+            self.logList.extend(dfTemp.loc[dfTemp["IsExcept"],["_id"]])
 
     def paddingWithPrevious(self,field):
-        dfTemp = self.df.loc[self.df[field] == 0]
-        for i, row in dfTemp.iterrows():
-            preIndex = row.index[0] - 1
+        for i, row in self.df.loc[self.df[field] == 0.0].iterrows():
+            preIndex = i - 1
             if preIndex >= 0:
-                row[field] = self.df[preIndex][field]
+                row[field] = self.df.iloc[preIndex][field]
                 self.updateList.append(row)
 
     def StandardizeTimePeriod(self,target):
+        tar = target
         ms = 0
-        tp = self.dfInfo.ix[self.Symbol]['TradingPeriod']
-        time1 = [t for i in tp.split(',') for t in i.split('-')]
-        if '.' in target:
-            target = target.split('.')[0]
-            ms = target.split('.')[1]
-        target = time.strptime(target, '%H:%M:%S')
+        tp = self.dfInfo.loc[self.dfInfo["Symbol"] == self.Symbol]["TradingPeriod"]
+        time1 = [t for i in tp[0].split(',') for t in i.split('-')]
+        if '.' in tar:
+            tar = tar.split('.')[0]
+            ms = tar.split('.')[1]
+        tar = time.strptime(tar, '%H:%M:%S')
         for i in zip(*([iter(time1)] * 2)):
             start = time.strptime(str(i[0]).strip(), '%H:%M')
             end = time.strptime(str(i[1]).strip(), '%H:%M')
-            if self.compare_time(start,end,target,ms):
+            if self.compare_time(start,end,tar,ms):
                 return True
 
         return False
