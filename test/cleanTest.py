@@ -4,6 +4,7 @@ import unittest
 import pandas as pd
 from CleanData import CleanData
 
+
 class myTest(unittest.TestCase):
 
     def setUp(self):
@@ -15,51 +16,76 @@ class myTest(unittest.TestCase):
         self.CD.dfInfo = pd.read_csv("E:\\dbProcess\\test\\test.csv")
 
 
-    # def test_illegalTradingTime(self):
-    #     self.CD.cleanIllegalTradingTime()
-    #     testList = self.CD.removeList
-    #     self.assertEqual(len(testList), 4)
+    def test_illegalTradingTime(self):
+        self.CD.cleanIllegalTradingTime()
+        removeList = self.CD.removeList
+        self.assertIn(0, removeList)
+        self.assertIn(2, removeList)
+        self.assertIn(3, removeList)
 
 
     def test_cleanSameTimestamp(self):
         self.CD.cleanSameTimestamp()
         testList = self.CD.removeList
-        testList = [str(x) for x in testList]
-        self.assertIn("590b25de7405ae0cb063b100", testList)
+        self.assertIn(8, testList)
 
     def test_cleanNullVolTurn(self):
         self.CD.cleanNullVolTurn()
+        df = self.CD.df
         updateList = self.CD.updateList
         removeList = self.CD.removeList
-        removeList = [str(x) for x in removeList]
         for i in updateList:
-            if "590b25de7405ae0cb063b087" == str(i["_id"]):
-                self.assertEqual(i["lastTurnover"], 1000.0)
-            if "590b25de7405ae0cb063b088" == str(i["_id"]):
-                self.assertEqual(i["lastVolume"], 2.0)
-            if "590b25de7405ae0cb063b089" == str(i["_id"]):
-                self.assertEqual(i["lastPrice"], 10.0)
+            if i == 0:
+                self.assertEqual(df.loc[i,"lastTurnover"], 1000.0)
+            if i == 1:
+                self.assertEqual(df.loc[i,"lastVolume"], 2.0)
+            if i == 2:
+                self.assertEqual(df.loc[i,"lastPrice"], 10.0)
             # turnover为0,lastVol不为0
-            if "590b25de7405ae0cb063b091" == str(i["_id"]):
-                self.assertEqual(i["turnover"], 10.0)
+            if i == 4:
+                self.assertEqual(df.loc[i,"turnover"], 120.0)
             # volume为0,lastVolume不为0
-            if "590b25de7405ae0cb063b092" == str(i["_id"]):
-                self.assertEqual(i["volume"], 110.0)
+            if i == 5:
+                self.assertEqual(df.loc[i,"volume"], 110.0)
 
         # volume、openInterest、turnover均为0
-        self.assertIn("590b25de7405ae0cb063b090", removeList)
+        self.assertIn(3, removeList)
 
     def test_cleanNullOpenInter(self):
         self.CD.cleanNullOpenInter()
+        df = self.CD.df
         updateList = self.CD.updateList
         for i in updateList:
-            if "590b25de7405ae0cb063b095" == str(i["_id"]):
-                self.assertEqual(i["openInterest"], 52772.0)
+            if i == 6:
+                self.assertEqual(df.loc[i,"openInterest"], 52772.0)
 
     def test_cleanNullPriceIndicator(self):
         self.CD.cleanNullPriceIndicator()
         removeList = self.CD.removeList
-        self.assertIn("590b25de7405ae0cb063b097", removeList)
+        self.assertIn(7, removeList)
+        df = self.CD.df
+        updateList = self.CD.updateList
+        for i in updateList:
+            if i == 9:
+                self.assertEqual(df.loc[i,"lastPrice"], 10.0)
+            if i == 10:
+                self.assertEqual(df.loc[i,"highPrice"], 10.0)
+            if i == 11:
+                self.assertEqual(df.loc[i,"lowPrice"], 15660.0)
+            if i == 12:
+                self.assertEqual(df.loc[i,"bidPrice1"], 15645.0)
+            if i == 13:
+                self.assertEqual(df.loc[i,"askPrice1"], 15660.0)
+
+    def test_recordExceptionalPrice(self):
+        self.CD.recordExceptionalPrice()
+        logList = self.CD.logList
+        self.assertIn(9, logList)
+        self.assertIn(10, logList)
+        self.assertIn(11, logList)
+        self.assertIn(12, logList)
+        self.assertIn(13, logList)
+
 
 if __name__ == "__main__":
     unittest.main()
