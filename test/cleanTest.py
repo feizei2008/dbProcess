@@ -5,6 +5,7 @@ import pandas as pd
 from CleanData import CleanData
 
 
+
 class myTest(unittest.TestCase):
 
     def setUp(self):
@@ -22,7 +23,6 @@ class myTest(unittest.TestCase):
         self.assertIn(0, removeList)
         self.assertIn(2, removeList)
         self.assertIn(3, removeList)
-
 
     def test_cleanSameTimestamp(self):
         self.CD.cleanSameTimestamp()
@@ -85,6 +85,8 @@ class myTest(unittest.TestCase):
         self.assertIn(11, logList)
         self.assertIn(12, logList)
         self.assertIn(13, logList)
+
+
 
 
 if __name__ == "__main__":

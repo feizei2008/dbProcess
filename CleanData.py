@@ -7,10 +7,26 @@ from pymongo import MongoClient
 import pandas as pd
 import time
 import json
-from bson.objectid import ObjectId
+import logging
+
+LOG_FILE = time.strftime('%Y-%m-%d',time.localtime(time.time()))  + ".log"
+logging.basicConfig(filename=LOG_FILE, level=logging.DEBUG)
+logger = logging.getLogger(__name__)
+
+def add_log(func):
+    def newFunc(*args, **kwargs):
+        logger.debug("Before %s() call on %s" % (func.__name__, time.strftime("%Y-%m-%d %H:%M:%S")))
+        ret = func(*args, **kwargs)
+        logger.debug("After %s() call on %s" % (func.__name__, time.strftime("%Y-%m-%d %H:%M:%S")))
+        return ret
+    return newFunc
 
 
 class CleanData(object):
+
+    LOG_FILE = "test.log"
+    logging.basicConfig(filename=LOG_FILE, level=logging.INFO)
+    logger = logging.getLogger(__name__)
 
     def __init__(self):
 
@@ -18,7 +34,7 @@ class CleanData(object):
         self.removeList = []
         self.updateList = []
         self.logList = []
-        self.initCleanRegulation()
+        # self.initCleanRegulation()
 
     def initCleanRegulation(self):
         db = self.get_db("localhost", 27017, 'MTS_TICK_DB')
@@ -26,9 +42,10 @@ class CleanData(object):
 
         names = self.get_all_colls(db)
         for i in names:
+            print "start process collection %s........." %(i)
             self.Symbol = filter(str.isalpha, str(i)).lower()
             self.df = pd.DataFrame(list(self.get_items(db, i)))
-            self.cleanIllegalTradingTime()
+            # self.cleanIllegalTradingTime()
             self.cleanSameTimestamp()
             self.cleanNullVolTurn()
             self.cleanNullOpenInter()
@@ -37,9 +54,6 @@ class CleanData(object):
 
             self.delItemsFromRemove()
             self.insert2db(dbNew,i)
-
-
-
 
     def get_db(self,host,port,dbName):
         #建立连接
@@ -60,25 +74,30 @@ class CleanData(object):
         dbNew[coll_name].insert_many(data)
 
     def loadInformation(self):
-        dfInfo = pd.read_csv('E:\dbProcess\\BasicInformation.csv')
+        dfInfo = pd.read_csv('E:\dbProcess\BasicInformation.csv')
         dfInfo.index = dfInfo['Symbol'].tolist()
         del dfInfo['Symbol']
         return dfInfo
 
+    @add_log
     def cleanIllegalTradingTime(self):
         """删除非交易时段数据"""
         self.df['illegalTime'] = self.df["time"].map(self.StandardizeTimePeriod)
         self.df['illegalTime'] = self.df['illegalTime'].fillna(False)
         for i,row in self.df[self.df['illegalTime'] == True].iterrows():
             self.removeList.append(i)
+            logger.info('remove index = %d' %i)
         del self.df["illegalTime"]
 
+    @add_log
     def cleanSameTimestamp(self):
         """清除重复时间戳，记录"""
         idList = self.df[self.df["datetime"].duplicated()].index
         for i in idList.values:
             self.removeList.append(i)
+            logger.info('remove index = %d' % i)
 
+    @add_log
     def cleanNullVolTurn(self):
         """Tick有成交，但volume和turnover为0"""
         f = lambda x: float(x)
@@ -102,6 +121,7 @@ class CleanData(object):
         for i, row in dfTemp.iterrows():
             self.df.loc[i,"lastTurnover"] = row["lastTurnover"]
             self.updateList.append(i)
+            logger.info('lastTurn = 0, update index = %d' % i)
 
         # lastVolume为0,lastTurnover和lastPrice不为0
         dfTemp = self.df.loc[lastTurn & ~lastVol & lastP]
@@ -109,6 +129,7 @@ class CleanData(object):
         for i, row in dfTemp.iterrows():
             self.df.loc[i,"lastVolume"] = row["lastVolume"]
             self.updateList.append(i)
+            logger.info('lastVol = 0, update index = %d' % i)
 
         # lastPrice为0,lastVolume和lastTurnover不为0
         dfTemp = self.df.loc[lastTurn & lastVol & ~lastP]
@@ -116,6 +137,7 @@ class CleanData(object):
         for i, row in dfTemp.iterrows():
             self.df.loc[i,"lastPrice"] = row["lastPrice"]
             self.updateList.append(i)
+            logger.info('lastPrice = 0, update index = %d' % i)
 
         # lastVolume和lastTurnover均不为0
         dfTemp = self.df.loc[lastVol & lastTurn & (Vol | Turn | openIn)]
@@ -132,6 +154,7 @@ class CleanData(object):
                 row["turnover"] = self.df.loc[preIndex,"turnover"] + row["lastTurnover"]
                 self.df.loc[i,"turnover"] = row["turnover"]
                 self.updateList.append(i)
+                logger.info('Turn = 0 & lastTurn != 0, update index = %d' % i)
 
         # volume为0,lastVol不为0
         for i,row in self.df[Vol & lastVol].iterrows():
@@ -140,11 +163,14 @@ class CleanData(object):
                 row["volume"] = self.df.loc[preIndex,"volume"] + row["lastVolume"]
                 self.df.loc[i,"volume"] = row["volume"]
                 self.updateList.append(i)
+                logger.info('Vol = 0 & lastVol != 0, update index = %d' % i)
 
+    @add_log
     def cleanNullOpenInter(self):
         """持仓量为0,用上一个填充"""
         self.paddingWithPrevious("openInterest")
 
+    @add_log
     def cleanNullPriceIndicator(self):
         lastP = self.df["lastPrice"] == 0.0
         high = self.df["highPrice"] == 0.0
@@ -153,7 +179,11 @@ class CleanData(object):
         askP = self.df["askPrice1"] == 0.0
         #如果均为0，删除
         if self.df.loc[lastP & high & low & bidP & askP]._values.any():
-            self.removeList.extend(i for i in self.df.loc[lastP & high & low & bidP & askP].index.values)
+            # self.removeList.extend(i for i in self.df.loc[lastP & high & low & bidP & askP].index.values)
+            for i in self.df.loc[lastP & high & low & bidP & askP].index.values:
+                self.removeList.append(i)
+                logger.info('All Price is Null, remove index = %d' %i)
+
         # 某些为0，填充
         self.paddingWithPrevious("lastPrice")
         self.paddingWithPrevious("highPrice")
@@ -161,6 +191,7 @@ class CleanData(object):
         self.paddingWithPrevious("bidPrice1")
         self.paddingWithPrevious("askPrice1")
 
+    @add_log
     def recordExceptionalPrice(self):
         self.estimateExceptional("lastPrice")
         self.estimateExceptional("highPrice")
@@ -181,6 +212,7 @@ class CleanData(object):
         dfTemp["IsExcept"] = dfTemp["delta"] >= dfTemp["shift"] * 0.05
         for i, row in dfTemp.loc[dfTemp["IsExcept"]].iterrows():
             self.logList.append(i)
+            logger.info('log index = %d' % i)
 
     def paddingWithPrevious(self,field):
         for i, row in self.df.loc[self.df[field] == 0.0].iterrows():
@@ -190,6 +222,7 @@ class CleanData(object):
                     row[field] = self.df.loc[preIndex,field]
                     self.df.loc[i,field] = row[field]
                     self.updateList.append(i)
+                    logger.info('Field = %s, update index = %d' % (field, i))
 
     def StandardizeTimePeriod(self,target):
         tar = target
@@ -223,11 +256,6 @@ class CleanData(object):
 
 
 if __name__ == "__main__":
-    CleanData()
-    # dfInfo = loadInformation()
-    # db = get_db("localhost", 27017, 'MTS_TICK_DB')
-    # names = get_all_colls(db)
-    # for i in names:
-    #     Symbol = filter(str.isalpha, i)
-    #     df = pd.DataFrame(list(get_items(db, i)))
-    #     pass
+
+    ee = CleanData()
+    ee.initCleanRegulation()
