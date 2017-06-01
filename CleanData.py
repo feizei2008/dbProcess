@@ -8,8 +8,10 @@ import pandas as pd
 import time
 import json
 import logging
+import os
 
-LOG_FILE = time.strftime('%Y-%m-%d',time.localtime(time.time()))  + ".log"
+
+LOG_FILE = os.getcwd() + '/' + 'LogFile/' + time.strftime('%Y-%m-%d',time.localtime(time.time()))  + ".log"
 logging.basicConfig(filename=LOG_FILE, level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
@@ -43,9 +45,10 @@ class CleanData(object):
         names = self.get_all_colls(db)
         for i in names:
             print "start process collection %s........." %(i)
+            logger.info("start process collection %s........." %(i))
             self.Symbol = filter(str.isalpha, str(i)).lower()
             self.df = pd.DataFrame(list(self.get_items(db, i)))
-            # self.cleanIllegalTradingTime()
+            self.cleanIllegalTradingTime()
             self.cleanSameTimestamp()
             self.cleanNullVolTurn()
             self.cleanNullOpenInter()
@@ -74,7 +77,7 @@ class CleanData(object):
         dbNew[coll_name].insert_many(data)
 
     def loadInformation(self):
-        dfInfo = pd.read_csv('E:\dbProcess\BasicInformation.csv')
+        dfInfo = pd.read_csv(os.getcwd() + '/BasicInformation.csv')
         dfInfo.index = dfInfo['Symbol'].tolist()
         del dfInfo['Symbol']
         return dfInfo
@@ -256,6 +259,5 @@ class CleanData(object):
 
 
 if __name__ == "__main__":
-
     ee = CleanData()
     ee.initCleanRegulation()
