@@ -147,8 +147,12 @@ class CleanData(object):
 
         # volume、openInterest、turnover均为0，删除并记录
         if dfTemp.loc[Vol & Turn & openIn]._values.any():
-            self.removeList.extend(i for i in dfTemp.loc[Vol & Turn & openIn].index.values)
-            self.logList.extend(i for i in dfTemp.loc[Vol & Turn & openIn].index.values)
+            # self.removeList.extend(i for i in dfTemp.loc[Vol & Turn & openIn].index.values)
+            # self.logList.extend(i for i in dfTemp.loc[Vol & Turn & openIn].index.values)
+            for i in dfTemp.loc[Vol & Turn & openIn].index.values:
+                self.removeList.append(i)
+                self.logList.append(i)
+                logger.info('Vol & openInterest & turn = 0, remove index = %d' % i)
 
         # turnover为0,lastVol不为0
         for i, row in self.df[Turn & lastVol].iterrows():
