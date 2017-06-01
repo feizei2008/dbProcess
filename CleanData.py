@@ -36,7 +36,7 @@ class CleanData(object):
 
     def initCleanRegulation(self):
         db = self.get_db("localhost", 27017, 'MTS_TICK_DB')
-        dbNew = self.get_db("localhost", 27017, 'test')
+        dbNew = self.get_db("localhost", 27017, 'test_MTS_TICK_DB')
 
         names = self.get_all_colls(db)
         for i in names:
@@ -47,8 +47,8 @@ class CleanData(object):
             self.cleanIllegalTradingTime()
             self.cleanSameTimestamp()
             self.cleanNullVolTurn()
-            self.cleanNullOpenInter()
             self.cleanNullPriceIndicator()
+            self.cleanNullOpenInter()
             self.recordExceptionalPrice()
 
             self.delItemsFromRemove()
@@ -114,7 +114,7 @@ class CleanData(object):
         openIn = self.df["openInterest"] == 0.0
         lastP = self.df["lastPrice"] != 0.0
 
-        tu = self.dfInfo.loc[self.dfInfo["Symbol"] == self.Symbol]["TradingUnits"]
+        tu = self.dfInfo.loc[self.Symbol]["TradingUnits"]
 
         # lastTurn为0,lastVolume和lastPrice不为0
         dfTemp = self.df.loc[~lastTurn & lastVol & lastP]
@@ -231,7 +231,7 @@ class CleanData(object):
         tar = target
         ms = 0
         try:
-            tp = self.dfInfo.loc[self.dfInfo["Symbol"] == self.Symbol]["TradingPeriod"]
+            tp = self.dfInfo.loc[self.Symbol]["TradingPeriod"]
             time1 = [t for i in tp[0].split(',') for t in i.split('-')]
             if '.' in tar:
                 ms = tar.split('.')[1]
