@@ -26,10 +26,6 @@ def add_log(func):
 
 class CleanData(object):
 
-    LOG_FILE = "test.log"
-    logging.basicConfig(filename=LOG_FILE, level=logging.INFO)
-    logger = logging.getLogger(__name__)
-
     def __init__(self):
 
         self.dfInfo = self.loadInformation()
