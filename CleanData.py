@@ -118,9 +118,11 @@ class CleanData(object):
         openIn = self.df["openInterest"] == 0.0
         lastP = self.df["lastPrice"] != 0.0
 
+        tu = self.dfInfo.loc[self.dfInfo["Symbol"] == self.Symbol]["TradingUnits"]
+
         # lastTurn为0,lastVolume和lastPrice不为0
         dfTemp = self.df.loc[~lastTurn & lastVol & lastP]
-        dfTemp.loc[:,"lastTurnover"] = dfTemp.loc[:,"lastVolume"] * dfTemp.loc[:,"lastPrice"]
+        dfTemp.loc[:,"lastTurnover"] = dfTemp.loc[:,"lastVolume"] * dfTemp.loc[:,"lastPrice"] * float(tu)
         for i, row in dfTemp.iterrows():
             self.df.loc[i,"lastTurnover"] = row["lastTurnover"]
             self.updateList.append(i)
@@ -128,7 +130,7 @@ class CleanData(object):
 
         # lastVolume为0,lastTurnover和lastPrice不为0
         dfTemp = self.df.loc[lastTurn & ~lastVol & lastP]
-        dfTemp.loc[:,"lastVolume"] = dfTemp.loc[:,"lastTurnover"] / dfTemp.loc[:,"lastPrice"]
+        dfTemp.loc[:,"lastVolume"] = int(round(dfTemp.loc[:,"lastTurnover"] / (dfTemp.loc[:,"lastPrice"] * float(tu))))
         for i, row in dfTemp.iterrows():
             self.df.loc[i,"lastVolume"] = row["lastVolume"]
             self.updateList.append(i)
@@ -136,7 +138,7 @@ class CleanData(object):
 
         # lastPrice为0,lastVolume和lastTurnover不为0
         dfTemp = self.df.loc[lastTurn & lastVol & ~lastP]
-        dfTemp.loc[:,"lastPrice"] = dfTemp.loc[:,"lastTurnover"] / dfTemp.loc[:,"lastVolume"]
+        dfTemp.loc[:,"lastPrice"] = dfTemp.loc[:,"lastTurnover"] / (dfTemp.loc[:,"lastVolume"] * float(tu))
         for i, row in dfTemp.iterrows():
             self.df.loc[i,"lastPrice"] = row["lastPrice"]
             self.updateList.append(i)
@@ -147,8 +149,6 @@ class CleanData(object):
 
         # volume、openInterest、turnover均为0，删除并记录
         if dfTemp.loc[Vol & Turn & openIn]._values.any():
-            # self.removeList.extend(i for i in dfTemp.loc[Vol & Turn & openIn].index.values)
-            # self.logList.extend(i for i in dfTemp.loc[Vol & Turn & openIn].index.values)
             for i in dfTemp.loc[Vol & Turn & openIn].index.values:
                 self.removeList.append(i)
                 self.logList.append(i)
@@ -186,7 +186,6 @@ class CleanData(object):
         askP = self.df["askPrice1"] == 0.0
         #如果均为0，删除
         if self.df.loc[lastP & high & low & bidP & askP]._values.any():
-            # self.removeList.extend(i for i in self.df.loc[lastP & high & low & bidP & askP].index.values)
             for i in self.df.loc[lastP & high & low & bidP & askP].index.values:
                 self.removeList.append(i)
                 logger.info('All Price is Null, remove index = %d' %i)
@@ -218,12 +217,13 @@ class CleanData(object):
         dfTemp = dfTemp.dropna(axis=0, how='any')
         dfTemp["IsExcept"] = dfTemp["delta"] >= dfTemp["shift"] * 0.05
         for i, row in dfTemp.loc[dfTemp["IsExcept"]].iterrows():
-            self.logList.append(i)
-            logger.info('log index = %d' % i)
+            if i not in self.removeList:
+                self.logList.append(i)
+                logger.info('Field = %s, log index = %d' % (field, i))
 
     def paddingWithPrevious(self,field):
         for i, row in self.df.loc[self.df[field] == 0.0].iterrows():
-            if row["_id"] not in self.removeList:
+            if i not in self.removeList:
                 preIndex = i - 1
                 if preIndex >= 0:
                     row[field] = self.df.loc[preIndex,field]
