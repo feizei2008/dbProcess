@@ -27,32 +27,38 @@ def add_log(func):
 class CleanData(object):
 
     def __init__(self):
-
         self.dfInfo = self.loadInformation()
+
+    def initList(self):
         self.removeList = []
         self.updateList = []
         self.logList = []
-        # self.initCleanRegulation()
 
     def initCleanRegulation(self):
         db = self.get_db("localhost", 27017, 'MTS_TICK_DB')
         dbNew = self.get_db("localhost", 27017, 'test_MTS_TICK_DB')
-
         names = self.get_all_colls(db)
+        # names = ["jm1708"]
         for i in names:
-            print "start process collection %s........." %(i)
-            logger.info("start process collection %s........." %(i))
-            self.Symbol = filter(str.isalpha, str(i)).lower()
-            self.df = pd.DataFrame(list(self.get_items(db, i)))
-            self.cleanIllegalTradingTime()
-            self.cleanSameTimestamp()
-            self.cleanNullVolTurn()
-            self.cleanNullPriceIndicator()
-            self.cleanNullOpenInter()
-            self.recordExceptionalPrice()
+            try:
+                print "start process collection %s........." %(i)
+                logger.info("start process collection %s........." %(i))
+                self.Symbol = filter(str.isalpha, str(i)).lower()
+                self.df = pd.DataFrame(list(self.get_items(db, i)))
+                self.initList()
+                if not self.df.empty:
+                    self.cleanIllegalTradingTime()
+                    self.cleanSameTimestamp()
+                    self.cleanNullVolTurn()
+                    self.cleanNullPriceIndicator()
+                    self.cleanNullOpenInter()
+                    self.recordExceptionalPrice()
 
-            self.delItemsFromRemove()
-            self.insert2db(dbNew,i)
+                    self.delItemsFromRemove()
+                    self.insert2db(dbNew,i)
+            except Exception, e:
+                print e
+                continue
 
     def get_db(self,host,port,dbName):
         #建立连接
@@ -83,7 +89,7 @@ class CleanData(object):
         """删除非交易时段数据"""
         self.df['illegalTime'] = self.df["time"].map(self.StandardizeTimePeriod)
         self.df['illegalTime'] = self.df['illegalTime'].fillna(False)
-        for i,row in self.df[self.df['illegalTime'] == True].iterrows():
+        for i,row in self.df[self.df['illegalTime'] == False].iterrows():
             self.removeList.append(i)
             logger.info('remove index = %d' %i)
         del self.df["illegalTime"]
@@ -120,25 +126,29 @@ class CleanData(object):
         dfTemp = self.df.loc[~lastTurn & lastVol & lastP]
         dfTemp.loc[:,"lastTurnover"] = dfTemp.loc[:,"lastVolume"] * dfTemp.loc[:,"lastPrice"] * float(tu)
         for i, row in dfTemp.iterrows():
-            self.df.loc[i,"lastTurnover"] = row["lastTurnover"]
-            self.updateList.append(i)
-            logger.info('lastTurn = 0, update index = %d' % i)
+            if i not in self.removeList:
+                self.df.loc[i,"lastTurnover"] = row["lastTurnover"]
+                self.updateList.append(i)
+                logger.info('lastTurn = 0, update index = %d' % i)
 
         # lastVolume为0,lastTurnover和lastPrice不为0
         dfTemp = self.df.loc[lastTurn & ~lastVol & lastP]
-        dfTemp.loc[:,"lastVolume"] = int(round(dfTemp.loc[:,"lastTurnover"] / (dfTemp.loc[:,"lastPrice"] * float(tu))))
+        dfTemp.loc[:,"lastVolume"] = dfTemp.loc[:,"lastTurnover"] / (dfTemp.loc[:,"lastPrice"] * float(tu))
+        dfTemp["lastVolume"].map(lambda x:int(round(x)))
         for i, row in dfTemp.iterrows():
-            self.df.loc[i,"lastVolume"] = row["lastVolume"]
-            self.updateList.append(i)
-            logger.info('lastVol = 0, update index = %d' % i)
+            if i not in self.removeList:
+                self.df.loc[i,"lastVolume"] = row["lastVolume"]
+                self.updateList.append(i)
+                logger.info('lastVol = 0, update index = %d' % i)
 
         # lastPrice为0,lastVolume和lastTurnover不为0
         dfTemp = self.df.loc[lastTurn & lastVol & ~lastP]
         dfTemp.loc[:,"lastPrice"] = dfTemp.loc[:,"lastTurnover"] / (dfTemp.loc[:,"lastVolume"] * float(tu))
         for i, row in dfTemp.iterrows():
-            self.df.loc[i,"lastPrice"] = row["lastPrice"]
-            self.updateList.append(i)
-            logger.info('lastPrice = 0, update index = %d' % i)
+            if i not in self.removeList:
+                self.df.loc[i,"lastPrice"] = row["lastPrice"]
+                self.updateList.append(i)
+                logger.info('lastPrice = 0, update index = %d' % i)
 
         # lastVolume和lastTurnover均不为0
         dfTemp = self.df.loc[lastVol & lastTurn & (Vol | Turn | openIn)]
@@ -146,14 +156,15 @@ class CleanData(object):
         # volume、openInterest、turnover均为0，删除并记录
         if dfTemp.loc[Vol & Turn & openIn]._values.any():
             for i in dfTemp.loc[Vol & Turn & openIn].index.values:
-                self.removeList.append(i)
-                self.logList.append(i)
-                logger.info('Vol & openInterest & turn = 0, remove index = %d' % i)
+                if i not in self.removeList:
+                    self.removeList.append(i)
+                    self.logList.append(i)
+                    logger.info('Vol & openInterest & turn = 0, remove index = %d' % i)
 
         # turnover为0,lastVol不为0
         for i, row in self.df[Turn & lastVol].iterrows():
             preIndex = i - 1
-            if preIndex >= 0:
+            if preIndex >= 0 and i not in self.removeList:
                 row["turnover"] = self.df.loc[preIndex,"turnover"] + row["lastTurnover"]
                 self.df.loc[i,"turnover"] = row["turnover"]
                 self.updateList.append(i)
@@ -162,7 +173,7 @@ class CleanData(object):
         # volume为0,lastVol不为0
         for i,row in self.df[Vol & lastVol].iterrows():
             preIndex = i - 1
-            if preIndex >= 0:
+            if preIndex >= 0 and i not in self.removeList:
                 row["volume"] = self.df.loc[preIndex,"volume"] + row["lastVolume"]
                 self.df.loc[i,"volume"] = row["volume"]
                 self.updateList.append(i)
@@ -183,8 +194,9 @@ class CleanData(object):
         #如果均为0，删除
         if self.df.loc[lastP & high & low & bidP & askP]._values.any():
             for i in self.df.loc[lastP & high & low & bidP & askP].index.values:
-                self.removeList.append(i)
-                logger.info('All Price is Null, remove index = %d' %i)
+                if i not in self.removeList:
+                    self.removeList.append(i)
+                    logger.info('All Price is Null, remove index = %d' %i)
 
         # 某些为0，填充
         self.paddingWithPrevious("lastPrice")
@@ -211,7 +223,7 @@ class CleanData(object):
         dfTemp["shift"] = self.df[field].shift(1)
         dfTemp["delta"] = abs(dfTemp[field] - dfTemp["shift"])
         dfTemp = dfTemp.dropna(axis=0, how='any')
-        dfTemp["IsExcept"] = dfTemp["delta"] >= dfTemp["shift"] * 0.05
+        dfTemp["IsExcept"] = dfTemp["delta"] >= dfTemp["shift"] * 0.12
         for i, row in dfTemp.loc[dfTemp["IsExcept"]].iterrows():
             if i not in self.removeList:
                 self.logList.append(i)
@@ -221,7 +233,7 @@ class CleanData(object):
         for i, row in self.df.loc[self.df[field] == 0.0].iterrows():
             if i not in self.removeList:
                 preIndex = i - 1
-                if preIndex >= 0:
+                if preIndex >= 0 and i not in self.removeList:
                     row[field] = self.df.loc[preIndex,field]
                     self.df.loc[i,field] = row[field]
                     self.updateList.append(i)
@@ -232,7 +244,7 @@ class CleanData(object):
         ms = 0
         try:
             tp = self.dfInfo.loc[self.Symbol]["TradingPeriod"]
-            time1 = [t for i in tp[0].split(',') for t in i.split('-')]
+            time1 = [t for i in tp.split(',') for t in i.split('-')]
             if '.' in tar:
                 ms = tar.split('.')[1]
                 tar = tar.split('.')[0]
@@ -261,3 +273,5 @@ class CleanData(object):
 if __name__ == "__main__":
     ee = CleanData()
     ee.initCleanRegulation()
+    print "Data Clean is completed........."
+    logger.info("Data Clean is completed.........")
