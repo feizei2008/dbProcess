@@ -3,6 +3,7 @@
 import unittest
 import pandas as pd
 from CleanData import CleanData
+import time
 
 
 
@@ -13,7 +14,8 @@ class myTest(unittest.TestCase):
         db = self.CD.get_db("localhost", 27017, 'MTS_TICK_DB')
         i = 'CFTest'
         self.CD.Symbol = 'cf'
-        self.CD.df = pd.DataFrame(list(self.CD.get_items(db, i)))
+        self.CD.timePoint = time.strptime("2017-05-01", '%Y-%m-%d')
+        self.CD.df = pd.DataFrame(list(self.CD.get_specificItems(db, i, self.CD.timePoint)))
         self.CD.dfInfo = pd.read_csv("E:\\dbProcess\\test\\test.csv")
 
 
@@ -27,7 +29,7 @@ class myTest(unittest.TestCase):
     def test_cleanSameTimestamp(self):
         self.CD.cleanSameTimestamp()
         testList = self.CD.removeList
-        self.assertIn(8, testList)
+        self.assertIn(9, testList)
 
     def test_cleanNullVolTurn(self):
         self.CD.cleanNullVolTurn()

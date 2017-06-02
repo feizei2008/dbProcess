@@ -5,7 +5,7 @@
 
 from pymongo import MongoClient
 import pandas as pd
-import time
+import time, datetime
 import json
 import logging
 import os
@@ -28,6 +28,8 @@ class CleanData(object):
 
     def __init__(self):
         self.dfInfo = self.loadInformation()
+        timePoint = datetime.datetime.today() - datetime.timedelta(days=1)
+        self.timePoint = timePoint.replace(hour=21, minute=00, second=00, microsecond=0)
 
     def initList(self):
         self.removeList = []
@@ -44,7 +46,7 @@ class CleanData(object):
                 print "start process collection %s........." %(i)
                 logger.info("start process collection %s........." %(i))
                 self.Symbol = filter(str.isalpha, str(i)).lower()
-                self.df = pd.DataFrame(list(self.get_items(db, i)))
+                self.df = pd.DataFrame(list(self.get_specificItems(db, i, self.timePoint)))
                 self.initList()
                 if not self.df.empty:
                     self.cleanIllegalTradingTime()
@@ -58,6 +60,7 @@ class CleanData(object):
                     self.insert2db(dbNew,i)
             except Exception, e:
                 print e
+                logger.error(e)
                 continue
 
     def get_db(self,host,port,dbName):
@@ -69,8 +72,8 @@ class CleanData(object):
     def get_all_colls(self,db):
         return [i for i in db.collection_names()]
 
-    def get_items(self,db,coll_name):
-        Items = db[coll_name].find()
+    def get_specificItems(self, db, coll_name, time):
+        Items = db[coll_name].find({"datetime": {'$gte': time}})
         return Items
 
     def insert2db(self,dbNew,coll_name):
@@ -97,7 +100,8 @@ class CleanData(object):
     @add_log
     def cleanSameTimestamp(self):
         """清除重复时间戳，记录"""
-        idList = self.df[self.df["datetime"].duplicated()].index
+        dfTemp = self.df.sort_values(by = ['datetime'], ascending = False)
+        idList = dfTemp[dfTemp["datetime"].duplicated()].index
         for i in idList.values:
             self.removeList.append(i)
             logger.info('remove index = %d' % i)
