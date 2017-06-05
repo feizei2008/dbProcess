@@ -9,6 +9,7 @@ import time, datetime
 import json
 import logging
 import os
+import dateutil.parser
 
 
 LOG_FILE = os.getcwd() + '/' + 'LogFile/' + time.strftime('%Y-%m-%d',time.localtime(time.time()))  + ".log"
@@ -37,11 +38,13 @@ class CleanData(object):
         self.logList = []
 
     def initCleanRegulation(self):
-        db = self.get_db("localhost", 27017, 'MTS_TICK_DB')
+        db = self.get_db("192.168.1.80", 27017, 'MTS_TICK_DB')
         dbNew = self.get_db("localhost", 27017, 'test_MTS_TICK_DB')
         names = self.get_all_colls(db)
-        # names = ["jm1708"]
+        # names = ["jd1710"]
         for i in names:
+            if 'sc' in i:
+                continue
             try:
                 print "start process collection %s........." %(i)
                 logger.info("start process collection %s........." %(i))
@@ -78,7 +81,10 @@ class CleanData(object):
 
     def insert2db(self,dbNew,coll_name):
         del self.df["_id"]
-        data = json.loads(self.df.T.to_json()).values()
+        data = json.loads(self.df.T.to_json(date_format = 'iso')).values()
+        for i in data:
+            if isinstance(i["datetime"], str):
+                i["datetime"] = datetime.datetime.strptime(i["datetime"], "%Y-%m-%d %H:%M:%S.%fZ")
         dbNew[coll_name].insert_many(data)
 
     def loadInformation(self):
@@ -110,12 +116,12 @@ class CleanData(object):
     def cleanNullVolTurn(self):
         """Tick有成交，但volume和turnover为0"""
         f = lambda x: float(x)
-        self.df["lastVolume"].map(f)
-        self.df["lastTurnover"].map(f)
-        self.df["volume"].map(f)
-        self.df["turnover"].map(f)
-        self.df["openInterest"].map(f)
-        self.df["lastPrice"].map(f)
+        self.df.loc["lastVolume"] = self.df["lastVolume"].map(f)
+        self.df.loc["lastTurnover"] = self.df["lastTurnover"].map(f)
+        self.df.loc["volume"] = self.df["volume"].map(f)
+        self.df.loc["turnover"] = self.df["turnover"].map(f)
+        self.df.loc["openInterest"] = self.df["openInterest"].map(f)
+        self.df.loc["lastPrice"] = self.df["lastPrice"].map(f)
 
         lastVol = self.df["lastVolume"] != 0.0
         lastTurn = self.df["lastTurnover"] != 0.0
@@ -219,7 +225,7 @@ class CleanData(object):
 
     def delItemsFromRemove(self):
         indexList = list(set(self.removeList))
-        self.df.drop(indexList,axis=0)
+        self.df = self.df.drop(indexList,axis=0)
 
     def estimateExceptional(self,field):
         dfTemp = pd.DataFrame(self.df[field])
@@ -272,6 +278,14 @@ class CleanData(object):
         else:
             return False
 
+    def jsonEncode(obj):
+        if isinstance(obj, datetime.datetime):
+            return obj.datetime.strftime('%Y-%m-%dT%H:%M:%S')
+
+        elif isinstance(obj, datetime.date):
+            return obj.datetime.strftime('%Y-%m-%d')
+        else:
+            raise TypeError('%r is not JSON serializable' % obj)
 
 
 if __name__ == "__main__":
