@@ -9,7 +9,6 @@ import time, datetime
 import json
 import logging
 import os
-import dateutil.parser
 
 
 LOG_FILE = os.getcwd() + '/' + 'LogFile/' + time.strftime('%Y-%m-%d',time.localtime(time.time()))  + ".log"
@@ -82,8 +81,8 @@ class CleanData(object):
         del self.df["_id"]
         data = json.loads(self.df.T.to_json(date_format = 'iso')).values()
         for i in data:
-            if isinstance(i["datetime"], str):
-                i["datetime"] = datetime.datetime.strptime(i["datetime"], "%Y-%m-%d %H:%M:%S.%fZ")
+            if isinstance(i["datetime"], unicode):
+                i["datetime"] = datetime.datetime.strptime(i["datetime"], "%Y-%m-%dT%H:%M:%S.%fZ")
         dbNew[coll_name].insert_many(data)
 
     def loadInformation(self):
