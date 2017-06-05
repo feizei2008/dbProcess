@@ -18,9 +18,9 @@ logger = logging.getLogger(__name__)
 
 def add_log(func):
     def newFunc(*args, **kwargs):
-        logger.debug("Before %s() call on %s" % (func.__name__, time.strftime("%Y-%m-%d %H:%M:%S")))
+        logger.warning("Before %s() call on %s" % (func.__name__, time.strftime("%Y-%m-%d %H:%M:%S")))
         ret = func(*args, **kwargs)
-        logger.debug("After %s() call on %s" % (func.__name__, time.strftime("%Y-%m-%d %H:%M:%S")))
+        logger.warning("After %s() call on %s" % (func.__name__, time.strftime("%Y-%m-%d %H:%M:%S")))
         return ret
     return newFunc
 
@@ -41,13 +41,12 @@ class CleanData(object):
         db = self.get_db("192.168.1.80", 27017, 'MTS_TICK_DB')
         dbNew = self.get_db("localhost", 27017, 'test_MTS_TICK_DB')
         names = self.get_all_colls(db)
-        # names = ["jd1710"]
         for i in names:
             if 'sc' in i:
                 continue
             try:
                 print "start process collection %s........." %(i)
-                logger.info("start process collection %s........." %(i))
+                logger.warning("start process collection %s........." %(i))
                 self.Symbol = filter(str.isalpha, str(i)).lower()
                 self.df = pd.DataFrame(list(self.get_specificItems(db, i, self.timePoint)))
                 self.initList()
@@ -100,7 +99,7 @@ class CleanData(object):
         self.df['illegalTime'] = self.df['illegalTime'].fillna(False)
         for i,row in self.df[self.df['illegalTime'] == False].iterrows():
             self.removeList.append(i)
-            logger.info('remove index = %d' %i)
+            logger.info('remove index = %d, id = %s' %(i, row["_id"]))
         del self.df["illegalTime"]
 
     @add_log
@@ -139,7 +138,7 @@ class CleanData(object):
             if i not in self.removeList:
                 self.df.loc[i,"lastTurnover"] = row["lastTurnover"]
                 self.updateList.append(i)
-                logger.info('lastTurn = 0, update index = %d' % i)
+                logger.info('lastTurn = 0, update index = %d, id = %s' % (i, row["_id"]))
 
         # lastVolume为0,lastTurnover和lastPrice不为0
         dfTemp = self.df.loc[lastTurn & ~lastVol & lastP]
@@ -149,7 +148,7 @@ class CleanData(object):
             if i not in self.removeList:
                 self.df.loc[i,"lastVolume"] = row["lastVolume"]
                 self.updateList.append(i)
-                logger.info('lastVol = 0, update index = %d' % i)
+                logger.info('lastVol = 0, update index = %d, id = %s' % (i, row["_id"]))
 
         # lastPrice为0,lastVolume和lastTurnover不为0
         dfTemp = self.df.loc[lastTurn & lastVol & ~lastP]
@@ -158,7 +157,7 @@ class CleanData(object):
             if i not in self.removeList:
                 self.df.loc[i,"lastPrice"] = row["lastPrice"]
                 self.updateList.append(i)
-                logger.info('lastPrice = 0, update index = %d' % i)
+                logger.info('lastPrice = 0, update index = %d, id = %s' % (i, row["_id"]))
 
         # lastVolume和lastTurnover均不为0
         dfTemp = self.df.loc[lastVol & lastTurn & (Vol | Turn | openIn)]
@@ -178,7 +177,7 @@ class CleanData(object):
                 row["turnover"] = self.df.loc[preIndex,"turnover"] + row["lastTurnover"]
                 self.df.loc[i,"turnover"] = row["turnover"]
                 self.updateList.append(i)
-                logger.info('Turn = 0 & lastTurn != 0, update index = %d' % i)
+                logger.info('Turn = 0 & lastTurn != 0, update index = %d, id = %s' % (i, row["_id"]))
 
         # volume为0,lastVol不为0
         for i,row in self.df[Vol & lastVol].iterrows():
@@ -187,7 +186,7 @@ class CleanData(object):
                 row["volume"] = self.df.loc[preIndex,"volume"] + row["lastVolume"]
                 self.df.loc[i,"volume"] = row["volume"]
                 self.updateList.append(i)
-                logger.info('Vol = 0 & lastVol != 0, update index = %d' % i)
+                logger.info('Vol = 0 & lastVol != 0, update index = %d, id = %s' % (i, row["_id"]))
 
     @add_log
     def cleanNullOpenInter(self):
@@ -237,7 +236,7 @@ class CleanData(object):
         for i, row in dfTemp.loc[dfTemp["IsExcept"]].iterrows():
             if i not in self.removeList:
                 self.logList.append(i)
-                logger.info('Field = %s, log index = %d' % (field, i))
+                logger.info('Field = %s, log index = %d, id = %s' % (field, i, row["_id"]))
 
     def paddingWithPrevious(self,field):
         for i, row in self.df.loc[self.df[field] == 0.0].iterrows():
@@ -247,7 +246,7 @@ class CleanData(object):
                     row[field] = self.df.loc[preIndex,field]
                     self.df.loc[i,field] = row[field]
                     self.updateList.append(i)
-                    logger.info('Field = %s, update index = %d' % (field, i))
+                    logger.info('Field = %s, update index = %d, id = %s' % (field, i, row["_id"]))
 
     def StandardizeTimePeriod(self,target):
         tar = target
@@ -273,20 +272,10 @@ class CleanData(object):
         """由于time类型没有millisecond，故单取ms进行逻辑判断"""
         if st > s1 and st < s2:
             return True
-        elif (st == s1 and ms == 0) or (st == s2 and ms == 0):
+        elif (st == s1 and ms == 0) or (st == s2 and int(ms) == 0):
             return True
         else:
             return False
-
-    def jsonEncode(obj):
-        if isinstance(obj, datetime.datetime):
-            return obj.datetime.strftime('%Y-%m-%dT%H:%M:%S')
-
-        elif isinstance(obj, datetime.date):
-            return obj.datetime.strftime('%Y-%m-%d')
-        else:
-            raise TypeError('%r is not JSON serializable' % obj)
-
 
 if __name__ == "__main__":
     ee = CleanData()
