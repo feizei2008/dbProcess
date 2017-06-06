@@ -248,6 +248,8 @@ class CleanData(object):
                     logger.info('Field = %s, update index = %d, id = %s' % (field, i, row["_id"]))
 
     def StandardizeTimePeriod(self,target):
+        if target == u'00:00:00.5':
+            pass
         tar = target
         ms = 0
         try:
@@ -269,9 +271,11 @@ class CleanData(object):
 
     def compare_time(self,s1,s2,st,ms):
         """由于time类型没有millisecond，故单取ms进行逻辑判断"""
+        if s2 == time.strptime('00:00', '%H:%M'):
+            s2 = time.strptime('23:59:61', '%H:%M:%S')
         if st > s1 and st < s2:
             return True
-        elif (st == s1 and ms == 0) or (st == s2 and int(ms) == 0):
+        elif (st == s1 and ms >= 0) or (st == s2 and int(ms) == 0):
             return True
         else:
             return False
