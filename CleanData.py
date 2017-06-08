@@ -27,9 +27,9 @@ def add_log(func):
 class CleanData(object):
 
     def __init__(self):
-        self.dfInfo = self.loadInformation()
         timePoint = datetime.datetime.today() - datetime.timedelta(days=1)
         self.timePoint = timePoint.replace(hour=21, minute=00, second=00, microsecond=0)
+        self.dfInfo = self.loadInformation()
 
     def initList(self):
         self.removeList = []
@@ -52,6 +52,7 @@ class CleanData(object):
                 if not self.df.empty:
                     self.cleanIllegalTradingTime()
                     self.cleanSameTimestamp()
+                    self.cleanExceptionalPrice()
                     self.cleanNullVolTurn()
                     self.cleanNullPriceIndicator()
                     self.cleanNullOpenInter()
@@ -89,7 +90,22 @@ class CleanData(object):
         dfInfo = pd.read_csv(os.getcwd() + '/BasicInformation.csv')
         dfInfo.index = dfInfo['Symbol'].tolist()
         del dfInfo['Symbol']
+        # 增加对历史周期交易时间段变更的记录
+        dfInfo["CurrPeriod"] = dfInfo["TradingPeriod"].map(self.identifyCurrentPeriod)
         return dfInfo
+
+    def identifyCurrentPeriod(self, target):
+        if '%' in target:
+            phase = [i for i in target.split('%')]
+            phase.sort(reverse=True)
+            for i in phase:
+                startDate = datetime.datetime.strptime(i.split('||')[0], "%Y-%m-%d")
+                if startDate <= self.timePoint:
+                    return i.split('||')[1]
+                else:
+                    continue
+        else:
+            return target.split('||')[1]
 
     @add_log
     def cleanIllegalTradingTime(self):
@@ -109,6 +125,20 @@ class CleanData(object):
         for i in idList.values:
             self.removeList.append(i)
             logger.info('remove index = %d' % i)
+
+    @add_log
+    def cleanExceptionalPrice(self):
+        """清理异常价格数据"""
+        openP = self.df["openPrice"] >= 1e+308
+        highP = self.df["highPrice"] >= 1e+308
+        settleP = self.df["settlementPrice"] >= 1e+308
+        lowP = self.df["lowPrice"] >= 1e+308
+
+        dfTemp = self.df.loc[openP | highP | settleP | lowP]
+        for i, row in dfTemp.iterrows():
+            if i not in self.removeList:
+                self.removeList.append(i)
+                logger.info('remove index = %d, id = %s' % (i, row["_id"]))
 
     @add_log
     def cleanNullVolTurn(self):
@@ -248,12 +278,10 @@ class CleanData(object):
                     logger.info('Field = %s, update index = %d, id = %s' % (field, i, row["_id"]))
 
     def StandardizeTimePeriod(self,target):
-        if target == u'00:00:00.5':
-            pass
-        tar = target
+        tar = str(target)
         ms = 0
         try:
-            tp = self.dfInfo.loc[self.Symbol]["TradingPeriod"]
+            tp = self.dfInfo.loc[self.Symbol]["CurrPeriod"]
             time1 = [t for i in tp.split(',') for t in i.split('-')]
             if '.' in tar:
                 ms = tar.split('.')[1]
@@ -275,7 +303,7 @@ class CleanData(object):
             s2 = time.strptime('23:59:61', '%H:%M:%S')
         if st > s1 and st < s2:
             return True
-        elif (st == s1 and ms >= 0) or (st == s2 and int(ms) == 0):
+        elif (st == s1 and int(ms) >= 0) or (st == s2 and int(ms) == 0):
             return True
         else:
             return False
