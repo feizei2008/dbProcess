@@ -11,7 +11,7 @@ import logging
 import os
 
 
-LOG_FILE = os.getcwd() + '/' + 'LogFile/' + time.strftime('%Y-%m-%d',time.localtime(time.time()))  + ".log"
+LOG_FILE = os.getcwd() + '/' + 'LogFile/' + time.strftime('%Y-%m-%d',time.localtime(time.time()))  + "test.log"
 logging.basicConfig(filename=LOG_FILE, level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
@@ -40,6 +40,7 @@ class CleanData(object):
         db = self.get_db("192.168.1.80", 27017, 'MTS_TICK_DB')
         dbNew = self.get_db("localhost", 27017, 'test_MTS_TICK_DB')
         names = self.get_all_colls(db)
+        names = ['al1708']
         for i in names:
             if 'sc' in i:
                 continue
@@ -131,10 +132,10 @@ class CleanData(object):
         """清理异常价格数据"""
         openP = self.df["openPrice"] >= 1e+308
         highP = self.df["highPrice"] >= 1e+308
-        settleP = self.df["settlementPrice"] >= 1e+308
+        # settleP = self.df["settlementPrice"] >= 1e+308
         lowP = self.df["lowPrice"] >= 1e+308
 
-        dfTemp = self.df.loc[openP | highP | settleP | lowP]
+        dfTemp = self.df.loc[openP | highP | lowP]
         for i, row in dfTemp.iterrows():
             if i not in self.removeList:
                 self.removeList.append(i)
@@ -271,6 +272,8 @@ class CleanData(object):
         for i, row in self.df.loc[self.df[field] == 0.0].iterrows():
             if i not in self.removeList:
                 preIndex = i - 1
+                while(preIndex in self.removeList or preIndex in self.updateList):
+                    preIndex = preIndex - 1
                 if preIndex >= 0 and i not in self.removeList:
                     row[field] = self.df.loc[preIndex,field]
                     self.df.loc[i,field] = row[field]
