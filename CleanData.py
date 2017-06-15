@@ -123,7 +123,7 @@ class CleanData(object):
     @add_log
     def reserveLastTickInAuc(self):
         """保留集合竞价期间最后一个tick数据"""
-        self.df["structTime"] = self.df["time"].map(lambda x: datetime.datetime.strptime(x, "%H%M%S%f"))
+        self.df["structTime"] = self.df["time"].map(lambda x: datetime.datetime.strptime(x, "%H:%M:%S.%f"))
         for st in self.AucTime:
             start = datetime.datetime.strptime(st, '%H:%M:%S')
             end = start + datetime.timedelta(minutes=1)
