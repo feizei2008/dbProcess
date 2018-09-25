@@ -51,17 +51,17 @@ class CleanData(object):
         # db是原始未清洗的数据库
         # dbNew = self.get_db("localhost", 27017, 'test_MTS_TICK_DB')
         dbNew = self.get_db("cleanedTickDb", 27017, 'VnTrader_Tick_Db_Clean')
-        # dbNew是清洗过的新数据库，建立新db server失败先跳过，似乎同一个主机上port只能唯一
+        # dbNew是清洗过的新数据库，建立新db server失败先跳过，似乎同一个主机上port只能唯一（不知道为什么dbNew自己建立了）
         names = self.get_all_colls(db)
         for i in names:
             if 'sc' in i:
-                # sc是指的shfe，但这是什么意思没懂
+                # 根据csv文件，sc是指的shfe，但这是什么意思没懂
                 continue
             try:
                 print "start process collection %s........." %(i)
                 logger.warning("start process collection %s........." %(i))
                 self.Symbol = filter(str.isalpha, str(i)).lower()
-                # Symbol为db的collections名称中（如'SR809'）的字母部分改成小写（'sr'）
+                # Symbol为db的collections名称中（如'SR809'）的字母部分改成小写（'sr'）,因为csv文件中都是小写，为了以后方便匹配
                 self.df = pd.DataFrame(list(self.get_specificItems(db, i, self.timePoint)))
                 # get_specificItems用于找出collection中大于等于某一时间点的数据，此处参数为T-1的21点整
                 self.initList()
@@ -94,14 +94,14 @@ class CleanData(object):
         return [i for i in db.collection_names()]
 
     def get_specificItems(self, db, coll_name, time):
-        Items = db[coll_name].find({"datetime": {'$gte': time}})
+        Items = db[coll_name].find({"datetime": {'$gte': time}}) # 注：原始db的datetime为ISO格式需要转换才能比较
         return Items
 
     def insert2db(self,dbNew,coll_name):
         del self.df["_id"]
-        self.df = self.df.dropna(axis=0, how='all')
+        self.df = self.df.dropna(axis=0, how='all') # all是整行数值都为na才删除，any是有一个为na就删除
         # 0101,行列行列
-        data = json.loads(self.df.T.to_json(date_format = 'iso')).values()
+        data = json.loads(self.df.T.to_json(date_format = 'iso')).values() # 返回字典组成的列表，不过这步似乎多余，因datetime本来就是ISO格式
         # df.T是倒置transpose
         # isoformat() Return a string representing the date in ISO 8601 format, ‘YYYY-MM-DD’. For example, date(2002, 12, 4).isoformat() == '2002-12-04'.
         for i in data:
@@ -130,12 +130,12 @@ class CleanData(object):
                 else:
                     continue
         else:
-            return target.split('||')[1]
+            return target.split('||')[1] # 这个函数运算过程没有看懂，暂默认其结果正确，可通过上一个函数打印dfInfo印证
 
     @add_log
     def cleanIllegalTradingTime(self):
         """删除非交易时段数据"""
-        self.df['illegalTime'] = self.df["time"].map(self.StandardizeTimePeriod)
+        self.df['illegalTime'] = self.df["time"].map(self.StandardizeTimePeriod) #map后交易时段内true，外false
         # vnpy 的tick数据的time值例如 09:10:16.0, 09:10:16.5，分别代表该秒内的2个tick
         # map的结果是给出true or false的结论，并未直接起到筛选作用
         self.df['illegalTime'] = self.df['illegalTime'].fillna(False)
