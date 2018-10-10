@@ -15,31 +15,11 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="runDataCleaning.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../vnpy/examples/DataRecording/runDataCleaning.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-86">
-              <caret line="12" column="26" lean-forward="true" selection-start-line="12" selection-start-column="26" selection-end-line="12" selection-end-column="26" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="dbTest.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dbTest.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-566">
-              <caret line="14" column="9" lean-forward="true" selection-start-line="14" selection-start-column="9" selection-end-line="14" selection-end-column="9" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="nt.py" pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/.PyCharmCE2016.3/system/python_stubs/2129268673/nt.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="784">
-              <caret line="394" column="4" lean-forward="false" selection-start-line="394" selection-start-column="4" selection-end-line="394" selection-end-column="4" />
+            <state relative-caret-position="574">
+              <caret line="52" column="23" lean-forward="false" selection-start-line="52" selection-start-column="23" selection-end-line="52" selection-end-column="23" />
               <folding />
             </state>
           </provider>
@@ -48,19 +28,77 @@
       <file leaf-file-name="CleanData.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/CleanData.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="451">
-              <caret line="159" column="75" lean-forward="true" selection-start-line="159" selection-start-column="75" selection-end-line="159" selection-end-column="75" />
+            <state relative-caret-position="530">
+              <caret line="418" column="0" lean-forward="true" selection-start-line="418" selection-start-column="0" selection-end-line="418" selection-end-column="0" />
               <folding>
                 <element signature="e#37#68#0" expanded="true" />
+                <element signature="e#149#164#0" expanded="false" />
+                <element signature="e#1612#1920#0" expanded="false" />
+                <element signature="e#1981#2682#0" expanded="false" />
+                <element signature="e#2716#2791#0" expanded="false" />
+                <element signature="e#4622#4731#0" expanded="false" />
+                <element signature="e#4773#4814#0" expanded="false" />
+                <element signature="e#4878#4987#0" expanded="false" />
+                <element signature="e#5038#5672#0" expanded="false" />
+                <element signature="e#5713#6065#0" expanded="false" />
+                <element signature="e#6120#6607#0" expanded="false" />
+                <element signature="e#6669#7347#0" expanded="false" />
+                <element signature="e#7406#8101#0" expanded="false" />
+                <element signature="e#8158#8526#0" expanded="false" />
+                <element signature="e#8586#9216#0" expanded="false" />
+                <element signature="e#9216#9226#0" expanded="false" />
+                <element signature="e#14027#14094#0" expanded="false" />
+                <element signature="e#14156#14997#0" expanded="false" />
+                <element signature="e#15058#15278#0" expanded="false" />
+                <element signature="e#15322#15409#0" expanded="false" />
+                <element signature="e#15460#16048#0" expanded="false" />
+                <element signature="e#16099#16683#0" expanded="false" />
+                <element signature="e#16737#17654#0" expanded="false" />
+                <element signature="e#17704#18140#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="null/VnTrader_Tick_Db/rb1901" pinned="false" current-in-tab="false">
-        <entry file="mongo://null/VnTrader_Tick_Db/rb1901">
-          <provider selected="true" editor-type-id="MongoData">
-            <state />
+      <file leaf-file-name="正则爬固定网页国务院滚动新闻.py" pinned="false" current-in-tab="false">
+        <entry file="file://D:/pythonLearn/正则爬固定网页国务院滚动新闻.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="30">
+              <caret line="75" column="37" lean-forward="false" selection-start-line="42" selection-start-column="0" selection-end-line="75" selection-end-column="37" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="logger.py" pinned="false" current-in-tab="false">
+        <entry file="file://D:/pythonLearn/logger.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="240">
+              <caret line="9" column="31" lean-forward="false" selection-start-line="9" selection-start-column="31" selection-end-line="9" selection-end-column="31" />
+              <folding>
+                <element signature="e#0#15#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="runDataCleaning - 副本.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../vnpy/examples/DataRecording/runDataCleaning - 副本.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2190">
+              <caret line="79" column="4" lean-forward="false" selection-start-line="79" selection-start-column="4" selection-end-line="79" selection-end-column="4" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DR_setting.json" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../vnpy/examples/DataRecording/DR_setting.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="240">
+              <caret line="8" column="26" lean-forward="false" selection-start-line="8" selection-start-column="26" selection-end-line="8" selection-end-column="26" />
+              <folding />
+            </state>
           </provider>
         </entry>
       </file>
@@ -96,6 +134,7 @@
         <option value="D:/pythonLearn/house-renting-spider-master/results/result_20170425_214356.sqlite" />
         <option value="D:/pythonLearn/gf-spider-master/girlFriendSpider.py" />
         <option value="$USER_HOME$/Desktop/theme/getjson.py" />
+        <option value="D:/pythonLearn/logger.py" />
         <option value="$PROJECT_DIR$/CleanData.py" />
       </list>
     </option>
@@ -121,7 +160,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -151,94 +189,95 @@
         </subPane>
       </pane>
       <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="settings.editor.selected.configurable" value="preferences.mongoOptions" />
-    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/theme" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../vnpy/examples/VnTrader/DR_setting.json" />
   </component>
-  <component name="RunManager" selected="Python.getjson">
-    <configuration default="false" name="mdtest" type="PythonConfigurationType" factoryName="Python" temporary="true">
+  <component name="RunManager" selected="Python.CleanData">
+    <configuration default="false" name="runDataCleaning" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="D:/vnpyqq群资料及研报/vnpy群共享/vn explaination for beginners" />
+      <option name="WORKING_DIRECTORY" value="D:/" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="dbProcess" />
-      <option name="SCRIPT_NAME" value="D:/vnpyqq群资料及研报/vnpy群共享/vn explaination for beginners/mdtest.py" />
+      <option name="SCRIPT_NAME" value="D:/runDataCleaning.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
     </configuration>
-    <configuration default="false" name="houseRentingSpider" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration default="false" name="runDataCleaning - 副本" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="D:/pythonLearn/house-renting-spider-master" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../vnpy/examples/DataRecording" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="dbProcess" />
-      <option name="SCRIPT_NAME" value="D:/pythonLearn/house-renting-spider-master/houseRentingSpider.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/../vnpy/examples/DataRecording/runDataCleaning - 副本.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
     </configuration>
-    <configuration default="false" name="break" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration default="false" name="CleanData" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="D:/pythonLearn/house-renting-spider-master/results" />
-      <option name="IS_MODULE_SDK" value="false" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="dbProcess" />
-      <option name="SCRIPT_NAME" value="D:/pythonLearn/house-renting-spider-master/results/break.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/CleanData.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
     </configuration>
-    <configuration default="false" name="girlFriendSpider" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration default="false" name="正则爬固定网页国务院滚动新闻" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="D:/pythonLearn/gf-spider-master" />
+      <option name="WORKING_DIRECTORY" value="D:/pythonLearn" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="dbProcess" />
-      <option name="SCRIPT_NAME" value="D:/pythonLearn/gf-spider-master/girlFriendSpider.py" />
+      <option name="SCRIPT_NAME" value="D:/pythonLearn/正则爬固定网页国务院滚动新闻.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
     </configuration>
-    <configuration default="false" name="getjson" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration default="false" name="logger" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$USER_HOME$/Desktop/theme" />
+      <option name="WORKING_DIRECTORY" value="D:/pythonLearn" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="dbProcess" />
-      <option name="SCRIPT_NAME" value="$USER_HOME$/Desktop/theme/getjson.py" />
+      <option name="SCRIPT_NAME" value="D:/pythonLearn/logger.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
@@ -378,19 +417,19 @@
       <method />
     </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="Python.mdtest" />
-      <item index="1" class="java.lang.String" itemvalue="Python.houseRentingSpider" />
-      <item index="2" class="java.lang.String" itemvalue="Python.break" />
-      <item index="3" class="java.lang.String" itemvalue="Python.girlFriendSpider" />
-      <item index="4" class="java.lang.String" itemvalue="Python.getjson" />
+      <item index="0" class="java.lang.String" itemvalue="Python.runDataCleaning" />
+      <item index="1" class="java.lang.String" itemvalue="Python.runDataCleaning - 副本" />
+      <item index="2" class="java.lang.String" itemvalue="Python.CleanData" />
+      <item index="3" class="java.lang.String" itemvalue="Python.正则爬固定网页国务院滚动新闻" />
+      <item index="4" class="java.lang.String" itemvalue="Python.logger" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.getjson" />
-        <item index="1" class="java.lang.String" itemvalue="Python.houseRentingSpider" />
-        <item index="2" class="java.lang.String" itemvalue="Python.girlFriendSpider" />
-        <item index="3" class="java.lang.String" itemvalue="Python.break" />
-        <item index="4" class="java.lang.String" itemvalue="Python.mdtest" />
+        <item index="0" class="java.lang.String" itemvalue="Python.CleanData" />
+        <item index="1" class="java.lang.String" itemvalue="Python.logger" />
+        <item index="2" class="java.lang.String" itemvalue="Python.正则爬固定网页国务院滚动新闻" />
+        <item index="3" class="java.lang.String" itemvalue="Python.runDataCleaning - 副本" />
+        <item index="4" class="java.lang.String" itemvalue="Python.runDataCleaning" />
       </list>
     </recent_temporary>
   </component>
@@ -423,26 +462,26 @@
     <frame x="81" y="-8" width="1847" height="1096" extended-state="7" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.11191942" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32946146" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="DB Browser" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.16116396" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="DB Execution Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32946146" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32917964" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32946146" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.34579438" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2751817" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Mongo Explorer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15165082" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4423676" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.11191942" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Mongo Explorer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.14661443" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2897196" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3997923" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27560717" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295099" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3997923" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -453,38 +492,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://D:/vnpy-master1.7SY/vnpy/trader/app/ctaStrategy/strategy/strategyChasingTickRebar.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4890">
-          <caret line="163" column="29" lean-forward="false" selection-start-line="163" selection-start-column="29" selection-end-line="163" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dbTest.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="780">
-          <caret line="26" column="36" lean-forward="false" selection-start-line="26" selection-start-column="36" selection-end-line="26" selection-end-column="36" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/CleanData.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#37#68#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://D:/vnpy-master1.7SY/vnpy/trader/app/ctaStrategy/strategy/strategyChasingTickRebar.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4890">
-          <caret line="163" column="29" lean-forward="false" selection-start-line="163" selection-start-column="29" selection-end-line="163" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/dbTest.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="720">
@@ -499,31 +506,29 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#37#68#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://D:/vnpy-master1.7SY/vnpy/trader/app/ctaStrategy/strategy/strategyChasingTickRebar.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4770">
-          <caret line="163" column="29" lean-forward="false" selection-start-line="163" selection-start-column="29" selection-end-line="163" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dbTest.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="720">
-          <caret line="26" column="36" lean-forward="false" selection-start-line="26" selection-start-column="36" selection-end-line="26" selection-end-column="36" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/CleanData.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#37#68#0" expanded="true" />
+            <element signature="e#149#164#0" expanded="false" />
+            <element signature="e#1612#1920#0" expanded="false" />
+            <element signature="e#1981#2682#0" expanded="false" />
+            <element signature="e#2716#2791#0" expanded="false" />
+            <element signature="e#4622#4731#0" expanded="false" />
+            <element signature="e#4773#4814#0" expanded="false" />
+            <element signature="e#4878#4987#0" expanded="false" />
+            <element signature="e#5038#5672#0" expanded="false" />
+            <element signature="e#5713#6065#0" expanded="false" />
+            <element signature="e#6120#6607#0" expanded="false" />
+            <element signature="e#6669#7347#0" expanded="false" />
+            <element signature="e#7406#8101#0" expanded="false" />
+            <element signature="e#8158#8526#0" expanded="false" />
+            <element signature="e#8586#9216#0" expanded="false" />
+            <element signature="e#9216#9226#0" expanded="false" />
+            <element signature="e#14027#14094#0" expanded="false" />
+            <element signature="e#14156#14997#0" expanded="false" />
+            <element signature="e#15058#15278#0" expanded="false" />
+            <element signature="e#15322#15409#0" expanded="false" />
+            <element signature="e#15460#16048#0" expanded="false" />
+            <element signature="e#16099#16683#0" expanded="false" />
+            <element signature="e#16737#17654#0" expanded="false" />
+            <element signature="e#17704#18140#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -549,6 +554,29 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#37#68#0" expanded="true" />
+            <element signature="e#149#164#0" expanded="false" />
+            <element signature="e#1612#1920#0" expanded="false" />
+            <element signature="e#1981#2682#0" expanded="false" />
+            <element signature="e#2716#2791#0" expanded="false" />
+            <element signature="e#4622#4731#0" expanded="false" />
+            <element signature="e#4773#4814#0" expanded="false" />
+            <element signature="e#4878#4987#0" expanded="false" />
+            <element signature="e#5038#5672#0" expanded="false" />
+            <element signature="e#5713#6065#0" expanded="false" />
+            <element signature="e#6120#6607#0" expanded="false" />
+            <element signature="e#6669#7347#0" expanded="false" />
+            <element signature="e#7406#8101#0" expanded="false" />
+            <element signature="e#8158#8526#0" expanded="false" />
+            <element signature="e#8586#9216#0" expanded="false" />
+            <element signature="e#9216#9226#0" expanded="false" />
+            <element signature="e#14027#14094#0" expanded="false" />
+            <element signature="e#14156#14997#0" expanded="false" />
+            <element signature="e#15058#15278#0" expanded="false" />
+            <element signature="e#15322#15409#0" expanded="false" />
+            <element signature="e#15460#16048#0" expanded="false" />
+            <element signature="e#16099#16683#0" expanded="false" />
+            <element signature="e#16737#17654#0" expanded="false" />
+            <element signature="e#17704#18140#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -574,6 +602,29 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#37#68#0" expanded="true" />
+            <element signature="e#149#164#0" expanded="false" />
+            <element signature="e#1612#1920#0" expanded="false" />
+            <element signature="e#1981#2682#0" expanded="false" />
+            <element signature="e#2716#2791#0" expanded="false" />
+            <element signature="e#4622#4731#0" expanded="false" />
+            <element signature="e#4773#4814#0" expanded="false" />
+            <element signature="e#4878#4987#0" expanded="false" />
+            <element signature="e#5038#5672#0" expanded="false" />
+            <element signature="e#5713#6065#0" expanded="false" />
+            <element signature="e#6120#6607#0" expanded="false" />
+            <element signature="e#6669#7347#0" expanded="false" />
+            <element signature="e#7406#8101#0" expanded="false" />
+            <element signature="e#8158#8526#0" expanded="false" />
+            <element signature="e#8586#9216#0" expanded="false" />
+            <element signature="e#9216#9226#0" expanded="false" />
+            <element signature="e#14027#14094#0" expanded="false" />
+            <element signature="e#14156#14997#0" expanded="false" />
+            <element signature="e#15058#15278#0" expanded="false" />
+            <element signature="e#15322#15409#0" expanded="false" />
+            <element signature="e#15460#16048#0" expanded="false" />
+            <element signature="e#16099#16683#0" expanded="false" />
+            <element signature="e#16737#17654#0" expanded="false" />
+            <element signature="e#17704#18140#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -599,6 +650,29 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#37#68#0" expanded="true" />
+            <element signature="e#149#164#0" expanded="false" />
+            <element signature="e#1612#1920#0" expanded="false" />
+            <element signature="e#1981#2682#0" expanded="false" />
+            <element signature="e#2716#2791#0" expanded="false" />
+            <element signature="e#4622#4731#0" expanded="false" />
+            <element signature="e#4773#4814#0" expanded="false" />
+            <element signature="e#4878#4987#0" expanded="false" />
+            <element signature="e#5038#5672#0" expanded="false" />
+            <element signature="e#5713#6065#0" expanded="false" />
+            <element signature="e#6120#6607#0" expanded="false" />
+            <element signature="e#6669#7347#0" expanded="false" />
+            <element signature="e#7406#8101#0" expanded="false" />
+            <element signature="e#8158#8526#0" expanded="false" />
+            <element signature="e#8586#9216#0" expanded="false" />
+            <element signature="e#9216#9226#0" expanded="false" />
+            <element signature="e#14027#14094#0" expanded="false" />
+            <element signature="e#14156#14997#0" expanded="false" />
+            <element signature="e#15058#15278#0" expanded="false" />
+            <element signature="e#15322#15409#0" expanded="false" />
+            <element signature="e#15460#16048#0" expanded="false" />
+            <element signature="e#16099#16683#0" expanded="false" />
+            <element signature="e#16737#17654#0" expanded="false" />
+            <element signature="e#17704#18140#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -769,44 +843,120 @@
       </provider>
     </entry>
     <entry file="db://[Connection]consoles\Connection" />
-    <entry file="file://$PROJECT_DIR$/dbTest.py">
+    <entry file="file://$PROJECT_DIR$/test/cleanTest.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-566">
-          <caret line="14" column="9" lean-forward="true" selection-start-line="14" selection-start-column="9" selection-end-line="14" selection-end-column="9" />
-          <folding />
+        <state relative-caret-position="-1976">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Desktop/untitled1.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
     <entry file="file://$USER_HOME$/.PyCharmCE2016.3/system/python_stubs/2129268673/nt.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="784">
+        <state relative-caret-position="-2580">
           <caret line="394" column="4" lean-forward="false" selection-start-line="394" selection-start-column="4" selection-end-line="394" selection-end-column="4" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test/cleanTest.py">
+    <entry file="file://$PROJECT_DIR$/../vnpy/examples/VnTrader/DR_setting.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1976">
+        <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../vnpy/examples/DataRecording/runDataCleaning.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-86">
-          <caret line="12" column="26" lean-forward="true" selection-start-line="12" selection-start-column="26" selection-end-line="12" selection-end-column="26" />
+        <state relative-caret-position="34">
+          <caret line="61" column="4" lean-forward="true" selection-start-line="61" selection-start-column="4" selection-end-line="61" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://D:/runDataCleaning.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="10" column="0" lean-forward="true" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../vnpy/examples/DataRecording/DR_setting.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="8" column="26" lean-forward="false" selection-start-line="8" selection-start-column="26" selection-end-line="8" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://D:/pythonLearn/logger.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="9" column="31" lean-forward="false" selection-start-line="9" selection-start-column="31" selection-end-line="9" selection-end-column="31" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../vnpy/examples/DataRecording/runDataCleaning - 副本.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2190">
+          <caret line="79" column="4" lean-forward="false" selection-start-line="79" selection-start-column="4" selection-end-line="79" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dbTest.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="574">
+          <caret line="52" column="23" lean-forward="false" selection-start-line="52" selection-start-column="23" selection-end-line="52" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://D:/pythonLearn/正则爬固定网页国务院滚动新闻.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="75" column="37" lean-forward="false" selection-start-line="42" selection-start-column="0" selection-end-line="75" selection-end-column="37" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/CleanData.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="451">
-          <caret line="159" column="75" lean-forward="true" selection-start-line="159" selection-start-column="75" selection-end-line="159" selection-end-column="75" />
+        <state relative-caret-position="530">
+          <caret line="418" column="0" lean-forward="true" selection-start-line="418" selection-start-column="0" selection-end-line="418" selection-end-column="0" />
           <folding>
             <element signature="e#37#68#0" expanded="true" />
+            <element signature="e#149#164#0" expanded="false" />
+            <element signature="e#1612#1920#0" expanded="false" />
+            <element signature="e#1981#2682#0" expanded="false" />
+            <element signature="e#2716#2791#0" expanded="false" />
+            <element signature="e#4622#4731#0" expanded="false" />
+            <element signature="e#4773#4814#0" expanded="false" />
+            <element signature="e#4878#4987#0" expanded="false" />
+            <element signature="e#5038#5672#0" expanded="false" />
+            <element signature="e#5713#6065#0" expanded="false" />
+            <element signature="e#6120#6607#0" expanded="false" />
+            <element signature="e#6669#7347#0" expanded="false" />
+            <element signature="e#7406#8101#0" expanded="false" />
+            <element signature="e#8158#8526#0" expanded="false" />
+            <element signature="e#8586#9216#0" expanded="false" />
+            <element signature="e#9216#9226#0" expanded="false" />
+            <element signature="e#14027#14094#0" expanded="false" />
+            <element signature="e#14156#14997#0" expanded="false" />
+            <element signature="e#15058#15278#0" expanded="false" />
+            <element signature="e#15322#15409#0" expanded="false" />
+            <element signature="e#15460#16048#0" expanded="false" />
+            <element signature="e#16099#16683#0" expanded="false" />
+            <element signature="e#16737#17654#0" expanded="false" />
+            <element signature="e#17704#18140#0" expanded="false" />
           </folding>
         </state>
       </provider>
