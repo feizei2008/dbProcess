@@ -45,14 +45,14 @@ def remove_items(db,coll_name,item):
 if __name__ == "__main__":
 
     timePoint = datetime.datetime.today() - datetime.timedelta(days = 13)
-    db = get_db("192.168.2.48",27017,'MTS_TICK_DB')
-    db_bk = get_db("localhost",27017,'MTS_TICK_DB')
+    db = get_db("localhost", 27017, 'VnTrader_Tick_Db')
+    db_bk = get_db("bkp",27017,'MTS_TICK_DB')
     names = get_all_colls(db)
     for i in names:
         items = list(get_specificItems(db,i,timePoint))
         if items != []:
             insert_items(db_bk,i,items)
             # 删除原db中相应数据
-            remove_items(db,i,items)
+            # remove_items(db,i,items)
         print "Back up Collection %s........" %(i)
 

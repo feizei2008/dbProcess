@@ -90,39 +90,40 @@ class CleanData(object):
         db = self.get_db("localhost", 27017, 'VnTrader_Tick_Db')
         # db是原始未清洗的数据库
         # dbNew = self.get_db("localhost", 27017, 'test_MTS_TICK_DB')
-        dbNew = self.get_db("cleanedTickDb", 27017, 'VnTrader_Tick_Db_Clean')
+        dbNew = self.get_db("localhost", 27017, 'VnTrader_Tick_Db_Clean')
         # dbNew是清洗过的新数据库，建立新db server失败先跳过，似乎同一个主机上port只能唯一（不知道为什么dbNew自己建立了）
         names = self.get_all_colls(db)
         for i in names:
             if 'sc' in i:
                 # 根据csv文件，sc是指的shfe，但这是什么意思没懂
                 continue
-            try:
-                print "start process collection %s........." %(i)
-                logger.warning("start process collection %s........." %(i))
-                self.Symbol = filter(str.isalpha, str(i)).lower()
-                # Symbol为db的collections名称中（如'SR809'）的字母部分改成小写（'sr'）,因为csv文件中都是小写，为了以后方便匹配
-                self.df = pd.DataFrame(list(self.get_specificItems(db, i, self.timePoint)))
-                # get_specificItems用于找出collection中大于等于某一时间点的数据，此处参数为T-1的21点整
-                self.initList()
-                if not self.df.empty:
-                    self.cleanIllegalTradingTime()
-                    self.reserveLastTickInAuc()
-                    self.cleanSameTimestamp()
-                    self.cleanExceptionalPrice()
-                    # self.cleanNullVolTurn()
-                    self.cleanNullPriceIndicator()
-                    self.cleanNullOpenInter()
-                    self.recordExceptionalPrice()
+            if i in ['rb1901','m1901','l1901','SR901','p1901']:
+                try:
+                    print "start process collection %s........." %(i)
+                    logger.warning("start process collection %s........." %(i))
+                    self.Symbol = filter(str.isalpha, str(i)).lower()
+                    # Symbol为db的collections名称中（如'SR809'）的字母部分改成小写（'sr'）,因为csv文件中都是小写，为了以后方便匹配
+                    self.df = pd.DataFrame(list(self.get_specificItems(db, i, self.timePoint)))
+                    # get_specificItems用于找出collection中大于等于某一时间点的数据，此处参数为T-1的21点整
+                    self.initList()
+                    if not self.df.empty:
+                        self.cleanIllegalTradingTime()
+                        self.reserveLastTickInAuc()
+                        self.cleanSameTimestamp()
+                        self.cleanExceptionalPrice()
+                        # self.cleanNullVolTurn()
+                        self.cleanNullPriceIndicator()
+                        self.cleanNullOpenInter()
+                        self.recordExceptionalPrice()
 
-                    self.delItemsFromRemove()
-                    # ？
-                    self.insert2db(dbNew,i)
-                    # 清洗后的数据插入到新的db中
-            except Exception, e:
-                print e
-                logger.error(e)
-                continue
+                        self.delItemsFromRemove()
+                        # ？
+                        self.insert2db(dbNew,i)
+                        # 清洗后的数据插入到新的db中
+                except Exception, e:
+                    print e
+                    logger.error(e)
+                    continue
 
     def get_db(self,host,port,dbName):
         # 建立连接，似乎同一个主机上port只能唯一
@@ -169,8 +170,8 @@ class CleanData(object):
                     return i.split('||')[1]
                 else:
                     continue
-        else:
-            return target.split('||')[1] # 这个函数运算过程没有看懂，暂默认其结果正确，可通过上一个函数打印dfInfo印证
+        else: # 没有%说明历史交易时间段只有一个
+            return target.split('||')[1]
 
     @add_log
     def cleanIllegalTradingTime(self):
@@ -417,9 +418,16 @@ class CleanData(object):
         else:
             return False
 
-if __name__ == "__main__":
-    ee = CleanData()
-    ee.initCleanRegulation()
+# if __name__ == "__main__":
+ee = CleanData()
+ee.initCleanRegulation()
+    # ee.cleanIllegalTradingTime()
+ee.reserveLastTickInAuc()
+ee.insert2db()
+    # ee.cleanSameTimestamp()
+    # ee.cleanExceptionalPrice()
+    # ee.cleanNullOpenInter()
+    # ee.cleanNullPriceIndicator()
+    # ee.recordExceptionalPrice()
     # print "Data Clean is completed........."
-    ee
-    logger.info("Data Clean is completed.........")
+logger.info("Data Clean is completed.........")
