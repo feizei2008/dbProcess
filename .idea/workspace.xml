@@ -25,11 +25,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CleanData.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="CleanData.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/CleanData.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="556">
-              <caret line="171" column="28" lean-forward="false" selection-start-line="171" selection-start-column="28" selection-end-line="171" selection-end-column="28" />
+            <state relative-caret-position="170">
+              <caret line="387" column="12" lean-forward="true" selection-start-line="387" selection-start-column="12" selection-end-line="387" selection-end-column="12" />
               <folding>
                 <element signature="e#37#68#0" expanded="true" />
                 <element signature="e#149#164#0" expanded="false" />
@@ -54,13 +54,12 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="dbCleanStat.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="dbCleanStat.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dbCleanStat.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1440">
-              <caret line="63" column="38" lean-forward="true" selection-start-line="63" selection-start-column="38" selection-end-line="63" selection-end-column="38" />
+            <state relative-caret-position="270">
+              <caret line="9" column="21" lean-forward="true" selection-start-line="9" selection-start-column="21" selection-end-line="9" selection-end-column="21" />
               <folding>
-                <element signature="e#103#134#0" expanded="true" />
                 <element signature="e#420#518#0" expanded="false" />
                 <element signature="e#604#645#0" expanded="false" />
                 <element signature="e#733#1466#0" expanded="false" />
@@ -125,8 +124,8 @@
         <option value="$PROJECT_DIR$/换月.py" />
         <option value="$PROJECT_DIR$/huanyue.py" />
         <option value="$PROJECT_DIR$/future_dominant_contract.py" />
-        <option value="$PROJECT_DIR$/CleanData.py" />
         <option value="$PROJECT_DIR$/dbCleanStat.py" />
+        <option value="$PROJECT_DIR$/CleanData.py" />
       </list>
     </option>
   </component>
@@ -164,20 +163,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="dbProcess" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="dbProcess" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="test" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
       <pane id="Scope" />
@@ -187,7 +172,7 @@
     <property name="settings.editor.selected.configurable" value="preferences.mongoOptions" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../vnpy/examples/VnTrader/DR_setting.json" />
   </component>
-  <component name="RunManager" selected="Python.dbCleanStat">
+  <component name="RunManager" selected="Python.CleanData">
     <configuration default="false" name="CleanData" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -416,10 +401,10 @@
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.dbCleanStat" />
-        <item index="1" class="java.lang.String" itemvalue="Python.future_dominant_contract" />
-        <item index="2" class="java.lang.String" itemvalue="Python.test" />
-        <item index="3" class="java.lang.String" itemvalue="Python.CleanData" />
+        <item index="0" class="java.lang.String" itemvalue="Python.CleanData" />
+        <item index="1" class="java.lang.String" itemvalue="Python.dbCleanStat" />
+        <item index="2" class="java.lang.String" itemvalue="Python.future_dominant_contract" />
+        <item index="3" class="java.lang.String" itemvalue="Python.test" />
         <item index="4" class="java.lang.String" itemvalue="Python.dbTest" />
       </list>
     </recent_temporary>
@@ -451,7 +436,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="81" y="-8" width="1847" height="1096" extended-state="7" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32946146" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="DB Browser" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.16116396" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -462,7 +447,7 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3748702" sideWeight="0.49804142" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Mongo Explorer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.15165082" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.42056075" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.11191942" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.11191942" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3997923" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -819,10 +804,23 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/dbCleanStat.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="9" column="21" lean-forward="true" selection-start-line="9" selection-start-column="21" selection-end-line="9" selection-end-column="21" />
+          <folding>
+            <element signature="e#420#518#0" expanded="false" />
+            <element signature="e#604#645#0" expanded="false" />
+            <element signature="e#733#1466#0" expanded="false" />
+            <marker date="1539951027538" expanded="false" signature="3669:4557" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/CleanData.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="556">
-          <caret line="171" column="28" lean-forward="false" selection-start-line="171" selection-start-column="28" selection-end-line="171" selection-end-column="28" />
+        <state relative-caret-position="170">
+          <caret line="387" column="12" lean-forward="true" selection-start-line="387" selection-start-column="12" selection-end-line="387" selection-end-column="12" />
           <folding>
             <element signature="e#37#68#0" expanded="true" />
             <element signature="e#149#164#0" expanded="false" />
@@ -842,20 +840,6 @@
             <element signature="e#15458#15545#0" expanded="false" />
             <element signature="e#15596#16184#0" expanded="false" />
             <element signature="e#16235#16819#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dbCleanStat.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1440">
-          <caret line="63" column="38" lean-forward="true" selection-start-line="63" selection-start-column="38" selection-end-line="63" selection-end-column="38" />
-          <folding>
-            <element signature="e#103#134#0" expanded="true" />
-            <element signature="e#420#518#0" expanded="false" />
-            <element signature="e#604#645#0" expanded="false" />
-            <element signature="e#733#1466#0" expanded="false" />
-            <marker date="1539951027538" expanded="false" signature="3669:4557" ph="..." />
           </folding>
         </state>
       </provider>

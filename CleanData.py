@@ -431,3 +431,4 @@ ee.insert2db()
     # ee.recordExceptionalPrice()
     # print "Data Clean is completed........."
 logger.info("Data Clean is completed.........")
+k = 1
