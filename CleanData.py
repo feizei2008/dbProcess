@@ -10,41 +10,6 @@ import json
 import logging
 import os
 
-# class Logger:
-#     def __init__(self, path, clevel=logging.DEBUG, Flevel=logging.DEBUG):
-#         self.logger = logging.getLogger(path)
-#         self.logger.setLevel(logging.DEBUG)
-#         fmt = logging.Formatter('[%(asctime)s] [%(levelname)s] %(message)s', '%Y-%m-%d %H:%M:%S')
-#         # 设置CMD日志
-#         sh = logging.StreamHandler()
-#         sh.setFormatter(fmt)
-#         sh.setLevel(clevel)
-#         # 设置文件日志
-#         fh = logging.FileHandler(path)
-#         fh.setFormatter(fmt)
-#         fh.setLevel(Flevel)
-#         self.logger.addHandler(sh)
-#         self.logger.addHandler(fh)
-#
-#     def debug(self, message):
-#         self.logger.debug(message)
-#
-#     def info(self, message):
-#         self.logger.info(message)
-#
-#     def war(self, message, color=FOREGROUND_YELLOW):
-#         set_color(color)
-#         self.logger.warn(message)
-#         set_color(FOREGROUND_WHITE)
-#
-#     def error(self, message, color=FOREGROUND_RED):
-#         set_color(color)
-#         self.logger.error(message)
-#         set_color(FOREGROUND_WHITE)
-#
-#     def cri(self, message):
-#         self.logger.critical(message)
-
 LOG_FILE = os.getcwd() + '\\' + 'LogFile\\' + time.strftime('%Y-%m-%d',time.localtime(time.time()))  + ".log"
 try:
     f =open(LOG_FILE,'r')
@@ -64,10 +29,12 @@ def add_log(func):
     return newFunc
 
 
+
 class CleanData(object):
 
     def __init__(self):
-        timePoint = datetime.datetime.today() - datetime.timedelta(days=1)
+        dayspan = int(repr((datetime.datetime.today() - datetime.datetime(2018, 9, 5)).days))  # 待清洗数据最早起始于20180905，如有变动须手动更改
+        timePoint = datetime.datetime.today() - datetime.timedelta(days=dayspan)
         self.timePoint = timePoint.replace(hour=21, minute=00, second=00, microsecond=0)
         # timePoint为夜盘的晚上21点整，品种理论交易日的开始
         self.dfInfo = self.loadInformation()
@@ -92,38 +59,69 @@ class CleanData(object):
         # dbNew = self.get_db("localhost", 27017, 'test_MTS_TICK_DB')
         dbNew = self.get_db("localhost", 27017, 'VnTrader_Tick_Db_Clean')
         # dbNew是清洗过的新数据库，建立新db server失败先跳过，似乎同一个主机上port只能唯一（不知道为什么dbNew自己建立了）
-        names = self.get_all_colls(db)
-        for i in names:
-            if 'sc' in i:
-                # 根据csv文件，sc是指的shfe，但这是什么意思没懂
-                continue
-            if i in ['rb1901','m1901','l1901','SR901','p1901']:
-                try:
-                    print "start process collection %s........." %(i)
-                    logger.warning("start process collection %s........." %(i))
-                    self.Symbol = filter(str.isalpha, str(i)).lower()
-                    # Symbol为db的collections名称中（如'SR809'）的字母部分改成小写（'sr'）,因为csv文件中都是小写，为了以后方便匹配
-                    self.df = pd.DataFrame(list(self.get_specificItems(db, i, self.timePoint)))
-                    # get_specificItems用于找出collection中大于等于某一时间点的数据，此处参数为T-1的21点整
-                    self.initList()
-                    if not self.df.empty:
-                        self.cleanIllegalTradingTime()
-                        self.reserveLastTickInAuc()
-                        self.cleanSameTimestamp()
-                        self.cleanExceptionalPrice()
-                        # self.cleanNullVolTurn()
-                        self.cleanNullPriceIndicator()
-                        self.cleanNullOpenInter()
-                        self.recordExceptionalPrice()
+        # names = self.get_all_colls(db)
+        # for i in names:
+        #     if 'sc' in i:
+        #         # 根据csv文件，sc是指的shfe，但这是什么意思没懂
+        #         continue
+        #     if i in rawdata:
+        #         try:
+        #             print "start process collection %s........." %(i)
+        #             logger.warning("start process collection %s........." %(i))
+        #             self.Symbol = filter(str.isalpha, str(i)).lower()
+        #             # Symbol为db的collections名称中（如'SR809'）的字母部分改成小写（'sr'）,因为csv文件中都是小写，为了以后方便匹配
+        #             self.df = pd.DataFrame(list(self.get_specificItems(db, i, self.timePoint)))
+        #             # get_specificItems用于找出collection中大于等于某一时间点的数据，此处参数为T-1的21点整
+        #             self.initList()
+        #             if not self.df.empty:
+        #                 print self.timePoint
+        #                 self.cleanIllegalTradingTime()
+        #                 self.reserveLastTickInAuc()
+        #                 self.cleanSameTimestamp()
+        #                 self.cleanExceptionalPrice()
+        #                 # self.cleanNullVolTurn()
+        #                 self.cleanNullPriceIndicator()
+        #                 self.cleanNullOpenInter()
+        #                 self.recordExceptionalPrice()
+        #
+        #                 self.delItemsFromRemove()
+        #                 # ？
+        #                 self.insert2db(dbNew,i)
+        #                 # 清洗后的数据插入到新的db中
+        #         except Exception, e:
+        #             print e
+        #             logger.error(e)
+        #             continue
+        rawdata = ['rb1901', 'm1901', 'l1901', 'SR901', 'p1901'] # 要清洗的数据，需要手动录入
+        for i in rawdata:
+            try:
+                print "start process collection %s........." % (i)
+                logger.warning("start process collection %s........." % (i))
+                self.Symbol = filter(str.isalpha, str(i)).lower()
+                # Symbol为db的collections名称中（如'SR809'）的字母部分改成小写（'sr'）,因为csv文件中都是小写，为了以后方便匹配
+                self.df = pd.DataFrame(list(self.get_specificItems(db, i, self.timePoint)))
+                # self.df.to_csv('%s.csv' % i)
+                # print self.timePoint
+                # get_specificItems用于找出collection中大于等于某一时间点的数据，此处参数为T-1的21点整
+                self.initList()
+                if not self.df.empty:
+                    self.cleanIllegalTradingTime()
+                    self.reserveLastTickInAuc()
+                    self.cleanSameTimestamp()
+                    self.cleanExceptionalPrice()
+                    # self.cleanNullVolTurn()
+                    self.cleanNullPriceIndicator()
+                    self.cleanNullOpenInter()
+                    self.recordExceptionalPrice()
 
-                        self.delItemsFromRemove()
-                        # ？
-                        self.insert2db(dbNew,i)
-                        # 清洗后的数据插入到新的db中
-                except Exception, e:
-                    print e
-                    logger.error(e)
-                    continue
+                    self.delItemsFromRemove()
+                    # ？
+                    self.insert2db(dbNew, i)
+                    # 清洗后的数据插入到新的db中
+            except Exception, e:
+                print e
+                logger.error(e)
+                continue
 
     def get_db(self,host,port,dbName):
         # 建立连接，似乎同一个主机上port只能唯一
@@ -418,17 +416,17 @@ class CleanData(object):
         else:
             return False
 
-# if __name__ == "__main__":
-ee = CleanData()
-ee.initCleanRegulation()
-    # ee.cleanIllegalTradingTime()
-ee.reserveLastTickInAuc()
-ee.insert2db()
-    # ee.cleanSameTimestamp()
-    # ee.cleanExceptionalPrice()
-    # ee.cleanNullOpenInter()
-    # ee.cleanNullPriceIndicator()
-    # ee.recordExceptionalPrice()
-    # print "Data Clean is completed........."
-logger.info("Data Clean is completed.........")
-k = 1
+if __name__ == "__main__":
+    ee = CleanData()
+    ee.initCleanRegulation()
+    ee
+# #     ee.cleanIllegalTradingTime()
+# #     ee.reserveLastTickInAuc()
+# #     ee.cleanSameTimestamp()
+# #     ee.cleanExceptionalPrice()
+# #     ee.cleanNullOpenInter()
+# #     ee.cleanNullPriceIndicator()
+# #     ee.recordExceptionalPrice()
+# #     ee.insert2db()
+    print "Data Clean is completed........."
+    logger.info("Data Clean is completed.........")

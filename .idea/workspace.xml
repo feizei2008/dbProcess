@@ -28,27 +28,10 @@
       <file leaf-file-name="CleanData.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/CleanData.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="387" column="12" lean-forward="true" selection-start-line="387" selection-start-column="12" selection-end-line="387" selection-end-column="12" />
+            <state relative-caret-position="320">
+              <caret line="418" column="26" lean-forward="true" selection-start-line="418" selection-start-column="26" selection-end-line="418" selection-end-column="26" />
               <folding>
                 <element signature="e#37#68#0" expanded="true" />
-                <element signature="e#149#164#0" expanded="false" />
-                <element signature="e#1398#1433#0" expanded="false" />
-                <element signature="e#1454#1490#0" expanded="false" />
-                <element signature="e#1612#1920#0" expanded="false" />
-                <element signature="e#4782#4891#0" expanded="false" />
-                <element signature="e#4933#4974#0" expanded="false" />
-                <element signature="e#6805#7483#0" expanded="false" />
-                <element signature="e#7542#8237#0" expanded="false" />
-                <element signature="e#8294#8662#0" expanded="false" />
-                <element signature="e#8722#9352#0" expanded="false" />
-                <element signature="e#9352#9362#0" expanded="false" />
-                <element signature="e#14163#14230#0" expanded="false" />
-                <element signature="e#14292#15133#0" expanded="false" />
-                <element signature="e#15194#15414#0" expanded="false" />
-                <element signature="e#15458#15545#0" expanded="false" />
-                <element signature="e#15596#16184#0" expanded="false" />
-                <element signature="e#16235#16819#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -819,27 +802,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/CleanData.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="387" column="12" lean-forward="true" selection-start-line="387" selection-start-column="12" selection-end-line="387" selection-end-column="12" />
+        <state relative-caret-position="320">
+          <caret line="418" column="26" lean-forward="true" selection-start-line="418" selection-start-column="26" selection-end-line="418" selection-end-column="26" />
           <folding>
             <element signature="e#37#68#0" expanded="true" />
-            <element signature="e#149#164#0" expanded="false" />
-            <element signature="e#1398#1433#0" expanded="false" />
-            <element signature="e#1454#1490#0" expanded="false" />
-            <element signature="e#1612#1920#0" expanded="false" />
-            <element signature="e#4782#4891#0" expanded="false" />
-            <element signature="e#4933#4974#0" expanded="false" />
-            <element signature="e#6805#7483#0" expanded="false" />
-            <element signature="e#7542#8237#0" expanded="false" />
-            <element signature="e#8294#8662#0" expanded="false" />
-            <element signature="e#8722#9352#0" expanded="false" />
-            <element signature="e#9352#9362#0" expanded="false" />
-            <element signature="e#14163#14230#0" expanded="false" />
-            <element signature="e#14292#15133#0" expanded="false" />
-            <element signature="e#15194#15414#0" expanded="false" />
-            <element signature="e#15458#15545#0" expanded="false" />
-            <element signature="e#15596#16184#0" expanded="false" />
-            <element signature="e#16235#16819#0" expanded="false" />
           </folding>
         </state>
       </provider>

@@ -7,27 +7,16 @@
 from pymongo import MongoClient
 from bson.son import SON
 import pandas as pd
-import time, datetime
-import json
-import logging
+import datetime as dt
 import os
 
-timePoint = datetime.datetime.today() - datetime.timedelta(days=1)
-timePoint = timePoint.replace(hour=21, minute=00, second=00, microsecond=0)
+rawdata = ['rb1901', 'm1901', 'l1901', 'SR901', 'p1901']
 
 def get_db(host, port, dbName):
     # 建立连接，似乎同一个主机上port只能唯一
     client = MongoClient(host, port)
     db = client[dbName]
     return db
-
-tickdb = get_db('localhost', 27017, 'VnTrader_Tick_Db')
-
-def get_all_colls(db):
-    return [i for i in db.collection_names()]
-
-colls = get_all_colls(tickdb)
-# print colls
 
 def aggregate_by_date(db,coll_name):
     pipeline = [#{"$unwind": "$date"},unwind针对数组，此例中不需要
@@ -40,97 +29,76 @@ def aggregate_by_date(db,coll_name):
     dfdate["Symbol"] = pd.Series(filter(str.isalpha,coll_name.lower()), index=range(len(dfdate)))
     dfdate = dfdate.set_index(dfdate["_id"])
     return dfdate
-#
-rbdate = aggregate_by_date(tickdb,'rb1901')#.Symbol[0]#[0]['_id']
-# print rbdate
 
 def get_list_index(tar,list):
-    list.append(tar)
+    list.append(float(tar))
     list.sort()
     return list.index(tar)
-# print get_list_index(6,[1,2,3,7,9])
 
 def locate_trading_period(dfdate):
     dfInfo = pd.read_csv(os.getcwd() + '/BasicInformation.csv')
     dfInfo.index = dfInfo['Symbol'].tolist()
     del dfInfo['Symbol']
-    collTradingPeriod = dfInfo.loc[dfdate.Symbol[0],"TradingPeriod"]
-    # print collTradingPeriod
-    # temp = collTradingPeriod.split('%')
-    # temp1 = [i.split("||") for i in temp]
-    # temp2 = [float(i[0].replace("-","")) for i in temp1]
-    # temp3 = [i[1] for i in temp1]
+    tradingPeriods = dfInfo.loc[dfdate.Symbol[0], "TradingPeriod"]
+    temp = tradingPeriods.split('%')
+    temp1 = [i.split("||") for i in temp]
+    validDates = [float(i[0].replace("-","")) for i in temp1]
+    dayTimes = [i[1] for i in temp1]
     currPeriod = []
-    for j in dfdate['_id']:#.tolist():
-        # print j
-        if '%' in collTradingPeriod:
-            phase = [i for i in collTradingPeriod.split('%')]
-            phase.sort(reverse=True) # 倒序排列
-            # print phase
-            for i in phase:
-                startDate = float(i.split('||')[0].replace('-',''))
-                if startDate <= float(j):
-                    currPeriod.append(i.split('||')[1])
-                else:
-                    continue
-        else:
-            currPeriod.append(collTradingPeriod.split('||')[1])
-    print currPeriod
-    # dfdate["currentTradingPeriod"] = dfdate["_id"].apply(get_list_index())
+    for j in dfdate['_id']:
+        i = get_list_index(float(j), validDates)
+        currPeriod.append(dayTimes[i-1])
+    dfdate['currPeriod'] = pd.Series(currPeriod, index=dfdate.index)
+    return dfdate
+    # for j in dfdate['_id']:#.tolist():
+    #     if '%' in collTradingPeriod:
+    #         phase = [i for i in collTradingPeriod.split('%')]
+    #         phase.sort(reverse=False)
+            # temp1 = [i.split("||") for i in phase]
+            # temp2 = [float(i[0].replace("-", "")) for i in temp1]
+            # temp3 = [i[1] for i in temp1]
+            # temp2.append(float(j))
+            # temp2.sort()
+            # k = temp2.index(float(j))
+            # currPeriod.append(temp3[k])
+            # temp2.remove(float(j))
+            # print temp2
+            # for i in phase:
+            #     startDate = float(i.split('||')[0].replace('-',''))
+            #     if startDate <= float(j):
+            #         currPeriod.append(i.split('||')[1])
+            #     else:
+            #         continue
+        # else:
+        #     currPeriod.append(collTradingPeriod.split('||')[1])
 
+def theoretical_tick_num(current):
+    current = "".join(current.split()) # 去除字符串内部空格
+    ls1 = current.split(",")
+    ls2 = [i.split("-") for i in ls1] # 子母list
+    str2dt = lambda x: dt.datetime.strptime(x, "%H:%M") # 字符串"9:00"改为datetime时:分格式datetime.datetime(1900, 1, 1, 9, 0)
+    ls3 = [map(str2dt, i) for i in ls2]
+    ls4 = [(i[1] - i[0]).total_seconds() for i in ls3] # 连续交易时间段内秒数
+    ls5 = [i + 86340 if i < 0 else i for i in ls4]
+    """
+    给负数加86340秒针对夜盘跨夜过零点的品种中20:59-00:00的时段，原始数据end(00:00)-start(20:59)=-75540；
+    一天24小时有86400秒，00:00-20:59有75540秒，20:59-23:59有10800秒，23:59到零点整有60秒；
+    集合竞价开始于20:59:00，结束于21:00:00，此一分钟内只在首尾各生成两笔tick数据，因此零点前的实际秒数可约等同end(23:59)-start(20:59)=10800秒，
+    end(00:00)-start(20:59) + 86340 = -75540 + 86340 = 10800
+    """
+    return sum(ls5) * 2
 
-locate_trading_period(rbdate)
+def cmp(dfdate):
+    dfdate['theoreticalTickNum'] = dfdate['currPeriod'].map(theoretical_tick_num)
+    dfdate['count/theoretical'] = dfdate['count'] / dfdate['theoreticalTickNum']
+    return dfdate
 
-# def loadInformation():
-#     dfInfo = pd.read_csv(os.getcwd() + '/BasicInformation.csv')
-#     dfInfo.index = dfInfo['Symbol'].tolist()
-#     del dfInfo['Symbol']
-#     # 增加对历史周期交易时间段变更的记录
-#     dfInfo["CurrPeriod"] = dfInfo["TradingPeriod"].map(identifyCurrentPeriod)
-#     # "TradingPeriod" column涵盖了品种在不同时间点起的日内交易时间段的变更（以螺纹为例，不一定准），需要一个map判断
-#     return dfInfo
-
-# def identifyCurrentPeriod(target):
-#     if '%' in target:
-#         phase = [i for i in target.split('%')]
-#         phase.sort(reverse=False) # 倒序排列
-#         for i in phase:
-#             startDate = float(i.split('||')[0].replace('-',''))
-#             if startDate <= timePoint:
-#                 return i.split('||')[1]
-#             else:
-#                 continue
-#     else:
-#         return target.split('||')[1]
-
-# def StandardizeTimePeriod(self,target):
-#     tar = str(target)
-#     # target参数应为原始数据中的time值
-#     ms = 0
-#     try:
-#         tp = self.dfInfo.loc[self.Symbol]["CurrPeriod"]
-#         time1 = [t for i in tp.split(',') for t in i.split('-')]
-#         # time1是一个形如 ['8:59 ', ' 10:15', ' 10:30 ', ' 11:30', ' 13:30 ', ' 15:00']的列表
-#         if '.' in tar:
-#             ms = tar.split('.')[1]
-#             # 形如vnpy的tick数据中time格式"09:10:16.5",ms为毫秒数
-#             tar = tar.split('.')[0]
-#
-#         tar = time.strptime(tar, '%H:%M:%S')
-#         for i in zip(*([iter(time1)] * 2)):
-#             # zip形如[('8:59 ', ' 10:15'), (' 10:30 ', ' 11:30'), (' 13:30 ', ' 15:00')]
-#             start = time.strptime(str(i[0]).strip(), '%H:%M')
-#             end = time.strptime(str(i[1]).strip(), '%H:%M')
-#             if self.compare_time(start,end,tar,ms):
-#                 return True
-#
-#     except Exception, e:
-#         print e
-
-# def theoretical_tick_num(coll):
-
-
-# now = datetime.datetime.now()
-# hourago = now - datetime.timedelta(hours=0.85)
-# timespan = now - hourago
-# timespan.total_seconds()
+tickdb = get_db('localhost', 27017, 'VnTrader_Tick_Db_Clean')
+for i in rawdata:
+    colldate = aggregate_by_date(tickdb, i)
+    colldate = locate_trading_period(colldate)
+    cmp(colldate).to_csv('%s_%s_cmp.csv' % (i, dt.datetime.today().strftime('%Y-%m-%d')))
+# rbdate = aggregate_by_date(tickdb, 'rb1901')#.Symbol[0]#[0]['_id']
+# ldate = aggregate_by_date(tickdb, 'l1901')
+# locate_trading_period(rbdate)
+# cmp(rbdate).to_csv('cmp.csv')
