@@ -13,17 +13,6 @@
             <SshTunnelingConfiguration />
           </option>
         </ServerConfiguration>
-        <ServerConfiguration>
-          <option name="label" value="cleanedTickDb" />
-          <option name="serverUrls">
-            <list>
-              <option value="localhost:27017" />
-            </list>
-          </option>
-          <option name="sshTunnelingConfiguration">
-            <SshTunnelingConfiguration />
-          </option>
-        </ServerConfiguration>
       </list>
     </option>
     <option name="shellPath" value="D:\MongoDB\Server\3.2\bin\mongo.exe" />

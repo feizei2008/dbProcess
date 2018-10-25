@@ -1,6 +1,7 @@
 #-*- coding: utf-8 -*-
 '''
 数据清洗
+这种清洗方法的问题是，并非直接删除db中的错误tick数据，而是筛选出正确tick后插入dbNew，导致新旧tick数据的_id值不一致，dbNew按_id排序出现错乱
 '''
 
 from pymongo import MongoClient
@@ -9,6 +10,7 @@ import time, datetime
 import json
 import logging
 import os
+from bson.son import SON
 
 LOG_FILE = os.getcwd() + '\\' + 'LogFile\\' + time.strftime('%Y-%m-%d',time.localtime(time.time()))  + ".log"
 try:
@@ -35,7 +37,9 @@ class CleanData(object):
     def __init__(self):
         dayspan = int(repr((datetime.datetime.today() - datetime.datetime(2018, 9, 5)).days))  # 待清洗数据最早起始于20180905，如有变动须手动更改
         timePoint = datetime.datetime.today() - datetime.timedelta(days=dayspan)
+        # dateRange = datetime.datetime.today() - datetime.timedelta(days=dayspan)
         self.timePoint = timePoint.replace(hour=21, minute=00, second=00, microsecond=0)
+        # self.dateRange = timePoint.replace(hour=21, minute=00, second=00, microsecond=0)
         # timePoint为夜盘的晚上21点整，品种理论交易日的开始
         self.dfInfo = self.loadInformation()
         self.AucTime = ['8:59:00', '20:59:00', '9:29:00', '9:14:00']
@@ -94,34 +98,41 @@ class CleanData(object):
         #             continue
         rawdata = ['rb1901', 'm1901', 'l1901', 'SR901', 'p1901'] # 要清洗的数据，需要手动录入
         for i in rawdata:
-            try:
-                print "start process collection %s........." % (i)
-                logger.warning("start process collection %s........." % (i))
-                self.Symbol = filter(str.isalpha, str(i)).lower()
-                # Symbol为db的collections名称中（如'SR809'）的字母部分改成小写（'sr'）,因为csv文件中都是小写，为了以后方便匹配
-                self.df = pd.DataFrame(list(self.get_specificItems(db, i, self.timePoint)))
-                # self.df.to_csv('%s.csv' % i)
-                # print self.timePoint
-                # get_specificItems用于找出collection中大于等于某一时间点的数据，此处参数为T-1的21点整
-                self.initList()
-                if not self.df.empty:
-                    self.cleanIllegalTradingTime()
-                    self.reserveLastTickInAuc()
-                    self.cleanSameTimestamp()
-                    self.cleanExceptionalPrice()
-                    # self.cleanNullVolTurn()
-                    self.cleanNullPriceIndicator()
-                    self.cleanNullOpenInter()
-                    self.recordExceptionalPrice()
+            pipeline = [{"$group": {"_id": "$date", "count": {"$sum": 1}}},
+                        {"$sort": SON([("date", -1), ("_id", -1)])}]  # 按日期倒序排序，也可按count排，等等
+            self.dates = list(db[i].aggregate(pipeline))
+            self.dateRange = [k["_id"] for k in self.dates]
+            print self.dateRange
+            for d in self.dateRange:
+                try:
+                    print "start process collection %s on %s........." % (i, d)
+                    logger.warning("start process collection %s on %s........." % (i, d))
+                    self.Symbol = filter(str.isalpha, str(i)).lower()
+                    # Symbol为db的collections名称中（如'SR809'）的字母部分改成小写（'sr'）,因为csv文件中都是小写，为了以后方便匹配
+                    # self.df = pd.DataFrame(list(self.get_specificItems(db, i, self.timePoint)))
+                    self.df = pd.DataFrame(list(self.get_Oneday_Items(db, i, d)))
+                    # self.df.to_csv('%s.csv' % i)
+                    # print self.timePoint
+                    # get_specificItems用于找出collection中大于等于某一时间点的数据，此处参数为T-1的21点整
+                    self.initList()
+                    if not self.df.empty:
+                        self.cleanIllegalTradingTime()
+                        self.reserveLastTickInAuc()
+                        self.cleanSameTimestamp()
+                        self.cleanExceptionalPrice()
+                        # self.cleanNullVolTurn()
+                        self.cleanNullPriceIndicator()
+                        self.cleanNullOpenInter()
+                        self.recordExceptionalPrice()
 
-                    self.delItemsFromRemove()
-                    # ？
-                    self.insert2db(dbNew, i)
-                    # 清洗后的数据插入到新的db中
-            except Exception, e:
-                print e
-                logger.error(e)
-                continue
+                        self.delItemsFromRemove()
+                        # ？
+                        self.insert2db(dbNew, i)
+                        # 清洗后的数据插入到新的db中
+                except Exception, e:
+                    print e
+                    logger.error(e)
+                    continue
 
     def get_db(self,host,port,dbName):
         # 建立连接，似乎同一个主机上port只能唯一
@@ -134,6 +145,10 @@ class CleanData(object):
 
     def get_specificItems(self, db, coll_name, time):
         Items = db[coll_name].find({"datetime": {'$gte': time}}) # 注：原始db的datetime为ISO格式需要转换才能比较
+        return Items
+
+    def get_Oneday_Items(self, db, coll_name, date):
+        Items = db[coll_name].find({"date": {'$eq': date}})  # 注：原始db的datetime为ISO格式需要转换才能比较
         return Items
 
     def insert2db(self,dbNew,coll_name):
